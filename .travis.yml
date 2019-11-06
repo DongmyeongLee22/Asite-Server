@@ -1,0 +1,43 @@
+language: java
+jdk:
+  - openjdk8
+
+branches:
+  only:
+    - master
+
+# Travis CI 서버의 Home
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+before_install:
+  - chmod +x gradlew
+
+script: "./gradlew clean build"
+
+before_deploy:
+  - zip -r Asite-Server *
+  - mkdir -p deploy
+  - mv Asite-Server.zip deploy/Asite-Server.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: sun-webservice-deploy # S3 버킷
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: public_read
+    local_dir: deploy # before_deploy에서 생성한 디렉토리
+    wait-until-deployed: true
+    on:
+      repo: DongmyeongLee22/Asite-Server
+      branch: master
+
+# CI 실행 완료시 메일로 알람
+notifications:
+  email:
+    recipients:
+      - dongmyeong.lee22@gmail.com
