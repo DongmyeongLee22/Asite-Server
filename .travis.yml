@@ -50,6 +50,8 @@ deploy:
     on:
       repo: DongmyeongLee22/demo22
       branch: master
+
+
 # CI 실행 완료시 메일로 알람
 notifications:
   email:
