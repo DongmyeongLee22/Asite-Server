@@ -1,10 +1,8 @@
-# Test
+# Tets
 spring:
   profiles:
     active: local
 
-
-# local 환경
 ---
 spring:
   profiles: local
