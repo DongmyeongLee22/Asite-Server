@@ -27,7 +27,7 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
-    bucket: sun-webservice-deploy # S3 버킷
+    bucket: asite-server-deploy # S3 버킷
     region: ap-northeast-2
     skip_cleanup: true
     acl: public_read
@@ -40,7 +40,7 @@ deploy:
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
-    bucket: sun-webservice-deploy # S3 버킷
+    bucket: asite-server-deploy # S3 버킷
     key: Asite-Server.zip # S3 버킷에 저장된 Asite-Server.zip 파일을 EC2로 배포
     bundle_type: zip
     application: asite-server # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
