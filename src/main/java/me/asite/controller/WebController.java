@@ -8,6 +8,6 @@ public class WebController {
 
     @GetMapping("/")
     public String hello(){
-        return "Hello Spring!!";
+        return "Hello Spring!! \n CodeDeployTest";
     }
 }
