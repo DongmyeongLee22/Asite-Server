@@ -18,9 +18,9 @@ before_install:
 script: "./gradlew clean build"
 
 before_deploy:
-  - zip -r Asite-Server *
+  - zip -r springboot-webservice *
   - mkdir -p deploy
-  - mv Asite-Server.zip deploy/Asite-Server.zip
+  - mv springboot-webservice.zip deploy/springboot-webservice.zip
 
 deploy:
   - provider: s3
@@ -42,8 +42,8 @@ deploy:
     bucket: sun-webservice-deploy # S3 버킷
     key: Asite-Server.zip # S3 버킷에 저장된 springboot-webservice.zip 파일을 EC2로 배포
     bundle_type: zip
-    application: asite-server # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
-    deployment_group: asite-server-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    application: springboot-webservice # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    deployment_group: springboot-webservice-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
     region: ap-northeast-2
     wait-until-deployed: true
     on:
