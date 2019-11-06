@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TestApiController {
 
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @PostMapping("/api/test")
     public void joinMember(@RequestBody MemberJoinRequestDto dto){
-        dto.toEntity();
+        memberRepository.save(dto.toEntity());
     }
 
 }
