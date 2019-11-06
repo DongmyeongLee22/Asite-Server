@@ -1,6 +1,7 @@
 language: java
 jdk:
   - openjdk8
+dist: trusty
 
 branches:
   only:
@@ -18,9 +19,9 @@ before_install:
 script: "./gradlew clean build"
 
 before_deploy:
-  - zip -r springboot-webservice *
+  - zip -r Asite-Server *
   - mkdir -p deploy
-  - mv springboot-webservice.zip deploy/springboot-webservice.zip
+  - mv Asite-Server.zip deploy/Asite-Server.zip
 
 deploy:
   - provider: s3
@@ -40,10 +41,10 @@ deploy:
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
     bucket: sun-webservice-deploy # S3 버킷
-    key: Asite-Server.zip # S3 버킷에 저장된 springboot-webservice.zip 파일을 EC2로 배포
+    key: Asite-Server.zip # S3 버킷에 저장된 Asite-Server.zip 파일을 EC2로 배포
     bundle_type: zip
-    application: springboot-webservice # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
-    deployment_group: springboot-webservice-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    application: asite-server # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    deployment_group: asite-server-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
     region: ap-northeast-2
     wait-until-deployed: true
     on:
