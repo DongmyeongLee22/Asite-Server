@@ -48,7 +48,7 @@ deploy:
     region: ap-northeast-2
     wait-until-deployed: true
     on:
-      repo: DongmyeongLee22/demo22
+      repo: DongmyeongLee22/Asite-Server
       branch: master
 
 
