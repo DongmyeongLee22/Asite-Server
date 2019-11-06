@@ -1,20 +1,19 @@
 package me.asite.api;
 
 import lombok.RequiredArgsConstructor;
-import me.asite.repository.StudentRepository;
+import me.asite.service.StudentService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class TestApiController {
+public class StudentApiController {
 
-    private final StudentRepository memberRepository;
+    private final StudentService studentService;
 
-    @PostMapping("/api/test")
-    public void joinMember(@RequestBody StudentJoinRequestDto dto){
-        memberRepository.save(dto.toEntity());
+    @PostMapping("/student/join")
+    public void joinStudent(@RequestBody StudentJoinRequestDto dto){
+        studentService.join(dto.toEntity());
     }
-
 }

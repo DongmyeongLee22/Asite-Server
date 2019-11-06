@@ -5,22 +5,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+
+import static javax.persistence.GenerationType.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Student {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
-    private String schoolID;
+    private String studentId;
 
     private String password;
 
@@ -28,14 +27,12 @@ public class Member {
 
     private String major;
 
-    private MemberType memberType;
 
     @Builder
-    public Member(String schoolID, String password, String name, String major, MemberType memberType) {
-        this.schoolID = schoolID;
+    public Student(String studentId, String password, String name, String major) {
+        this.studentId = studentId;
         this.password = password;
         this.name = name;
         this.major = major;
-        this.memberType = memberType;
     }
 }

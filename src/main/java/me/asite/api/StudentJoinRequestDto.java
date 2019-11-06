@@ -3,23 +3,25 @@ package me.asite.api;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.asite.domain.Member;
+import me.asite.domain.Student;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class MemberJoinRequestDto {
+public class StudentJoinRequestDto {
 
     private String name;
-    private String schoolID;
+    private String studentId;
     private String password;
+    private String major;
 
-    public Member toEntity() {
+    public Student toEntity() {
 
-        return Member.builder()
+        return Student.builder()
                 .name(name)
-                .schoolID(schoolID)
+                .studentId(studentId)
                 .password(password)
+                .major(major)
                 .build();
 
     }
