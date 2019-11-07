@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @RestController
 @RequiredArgsConstructor
 public class CourseApiController {
@@ -22,9 +24,11 @@ public class CourseApiController {
     }
 
     @GetMapping("/course/list")
-    public List<Course> getCourseList(@ModelAttribute CourseSearch courseSearch){
-        List<Course> all = courseRepository.findAll();
-        return all;
+    public List<CourseDto> getCourseList(@ModelAttribute CourseSearch courseSearch){
+        List<Course> courses = courseService.findCourses(courseSearch);
+        return courses.stream()
+                .map(CourseDto::new)
+                .collect(toList());
     }
 
 }

@@ -9,16 +9,16 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+    data: classpath:data.sql
 
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
+        show_sql: true
         format_sql: true
 
-spring.messages.basename: i18n/exception
-spring.messages.encoding: UTF-8
 
 logging.level:
   org.hibernate.SQL: debug

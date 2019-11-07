@@ -1,10 +1,13 @@
 package me.asite.service;
 
 import lombok.RequiredArgsConstructor;
+import me.asite.api.controller.CourseSearch;
 import me.asite.domain.Course;
 import me.asite.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -23,4 +26,7 @@ public class CourseService {
     }
 
 
+    public List<Course> findCourses(CourseSearch courseSearch) {
+        return courseRepository.findCourses(courseSearch);
+    }
 }

@@ -1,12 +1,10 @@
 package me.asite.api.dto;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import me.asite.domain.Course;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class CourseDto {
 
@@ -21,6 +19,21 @@ public class CourseDto {
     private String room;
     private String professor;
     private String time;
+
+    public CourseDto(Course course) {
+        devide = course.getDevide();
+        year = course.getYear();
+        term = course.getTerm();
+        area = course.getArea();
+        major = course.getMajor();
+        grade = course.getGrade();
+        title = course.getTitle();
+        credit = course.getCredit();
+        room = course.getRoom();
+        professor = course.getProfessor();
+        time = course.getTime();
+    }
+
 
     public Course toEntity() {
         return Course.builder()
