@@ -28,14 +28,16 @@ public class Student {
 
     private String major;
 
+    private String email;
     @OneToMany(mappedBy = "student")
     private List<Schedule> scheduleList;
 
     @Builder
-    public Student(String studentId, String password, String name, String major) {
+    public Student(String studentId, String password, String name, String major, String email) {
         this.studentId = studentId;
         this.password = password;
         this.name = name;
         this.major = major;
+        this.email = email;
     }
 }

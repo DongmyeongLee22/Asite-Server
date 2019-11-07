@@ -14,6 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+
+
 @RunWith(SpringRunner.class)
 @Transactional
 @SpringBootTest
@@ -65,10 +70,10 @@ public class CourseServiceTest {
         List<Course> courses2 = courseService.findCourses(courseSearch2);
 
         //then
-        Assert.assertEquals("알고리즘", courses1.get(0).getTitle());
-        Assert.assertEquals(1, courses1.size());
-        Assert.assertEquals(3,courses2.size());
-        }
+        assertThat(courses1.get(0).getMajor(), equalTo("컴퓨터공학"));
+        assertThat(courses2.size(), greaterThanOrEqualTo(3)); // 크거나 같다.
+
+    }
 
 
     private Course createCourse(String title, int year, int term, String major, String grade) {

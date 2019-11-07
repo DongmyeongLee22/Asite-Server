@@ -20,6 +20,12 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
+    public boolean vailidateJoin(String studentId) {
+        List<Student> students = studentRepository.findAllByStudentId(studentId);
+        return students.isEmpty();
+    }
+
+
     private void validateDuplicateStudent(Student student) {
         List<Student> students = studentRepository.findAllByStudentId(student.getStudentId());
         if (!students.isEmpty()) {
@@ -32,4 +38,8 @@ public class StudentService {
         return studentRepository.findById(studentId).orElseThrow(() -> new LoginFailedException("로그인 실패"));
     }
 
+    public boolean login(String sudentId, String password) {
+        List<Student> students = studentRepository.findAllByStudentIdAndPassword(sudentId, password);
+        return !students.isEmpty();
+    }
 }

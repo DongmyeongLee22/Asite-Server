@@ -14,6 +14,7 @@ public class StudentJoinRequestDto {
     private String studentId;
     private String password;
     private String major;
+    private String email;
 
     public Student toEntity() {
 
@@ -22,6 +23,7 @@ public class StudentJoinRequestDto {
                 .studentId(studentId)
                 .password(password)
                 .major(major)
+                .email(email)
                 .build();
 
     }
