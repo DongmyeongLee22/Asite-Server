@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
-import static javax.persistence.GenerationType.*;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -27,6 +28,8 @@ public class Student {
 
     private String major;
 
+    @OneToMany(mappedBy = "student")
+    private List<Schedule> scheduleList;
 
     @Builder
     public Student(String studentId, String password, String name, String major) {

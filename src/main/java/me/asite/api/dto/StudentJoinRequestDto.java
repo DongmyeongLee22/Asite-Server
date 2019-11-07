@@ -1,4 +1,4 @@
-package me.asite.api;
+package me.asite.api.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

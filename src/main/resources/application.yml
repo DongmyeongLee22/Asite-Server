@@ -17,9 +17,8 @@ spring:
       hibernate:
         format_sql: true
 
-  messages:
-    basename: i18n/exception
-    encoding: UTF-8
+spring.messages.basename: i18n/exception
+spring.messages.encoding: UTF-8
 
 logging.level:
   org.hibernate.SQL: debug
