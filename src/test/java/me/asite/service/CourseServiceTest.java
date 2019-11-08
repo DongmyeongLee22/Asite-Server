@@ -54,8 +54,8 @@ public class CourseServiceTest {
     public void 강의목록조회() throws Exception{
         //given
         Course course1 = createCourse("알고리즘", 2019, 1, "컴퓨터공학", "4학년");
-        Course course2 = createCourse("제어공학", 2019, 1, "정보통신공학", "3학년");
-        Course course3 = createCourse("전자회로", 2019, 1, "전자공학", "2학년");
+        Course course2 = createCourse("제어공학", 2017, 2, "정보통신공학", "3학년");
+        Course course3 = createCourse("전자회로", 2015, 1, "전자공학", "2학년");
 
         CourseSearch courseSearch1 = new CourseSearch(2019, 1, "4학년", "컴퓨터공학");
         CourseSearch courseSearch2 = new CourseSearch(0, 0, "전체 학년", "");
@@ -76,11 +76,11 @@ public class CourseServiceTest {
     }
 
 
-    private Course createCourse(String title, int year, int term, String major, String grade) {
+    private Course createCourse(String title, int year, int semester, String major, String grade) {
         return Course.builder()
                 .title(title)
                 .year(year)
-                .term(term)
+                .semester(semester)
                 .grade(grade)
                 .major(major)
                 .build();

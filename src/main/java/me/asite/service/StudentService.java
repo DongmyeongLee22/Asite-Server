@@ -2,6 +2,7 @@ package me.asite.service;
 
 import lombok.RequiredArgsConstructor;
 import me.asite.domain.Student;
+import me.asite.exception.LoginFailedException;
 import me.asite.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

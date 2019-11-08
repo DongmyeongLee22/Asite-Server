@@ -8,28 +8,30 @@ import me.asite.domain.Course;
 @NoArgsConstructor
 public class CourseDto {
 
-    private int devide;
+    private Long id;
+    private int number;
     private int year;
-    private int term;
-    private String area;
+    private int semester;
+    private String subject;
     private String major;
     private String grade;
     private String title;
     private String credit;
-    private String room;
+    private String location;
     private String professor;
     private String time;
 
     public CourseDto(Course course) {
-        devide = course.getDevide();
+        id = course.getId();
+        number = course.getNumber();
         year = course.getYear();
-        term = course.getTerm();
-        area = course.getArea();
+        semester = course.getSemester();
+        subject = course.getSubject();
         major = course.getMajor();
         grade = course.getGrade();
         title = course.getTitle();
         credit = course.getCredit();
-        room = course.getRoom();
+        location = course.getLocation();
         professor = course.getProfessor();
         time = course.getTime();
     }
@@ -37,15 +39,15 @@ public class CourseDto {
 
     public Course toEntity() {
         return Course.builder()
-                .devide(devide)
+                .number(number)
                 .year(year)
-                .term(term)
-                .area(area)
+                .semester(semester)
+                .subject(subject)
                 .major(major)
                 .grade(grade)
                 .title(title)
                 .credit(credit)
-                .room(room)
+                .location(location)
                 .professor(professor)
                 .time(time)
                 .build();

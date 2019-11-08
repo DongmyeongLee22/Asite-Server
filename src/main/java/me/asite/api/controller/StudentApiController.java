@@ -33,6 +33,6 @@ public class StudentApiController {
 
     @PostMapping("/student/login")
     public IsSuccessReponse login(@RequestBody StudentLoginRequestDto dto) {
-        return new IsSuccessReponse(studentService.login(dto.getSudentId(), dto.getPassword()));
+        return new IsSuccessReponse(studentService.login(dto.getStudentId(), dto.getPassword()));
     }
 }

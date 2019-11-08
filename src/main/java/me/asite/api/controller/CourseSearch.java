@@ -1,20 +1,18 @@
 package me.asite.api.controller;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class CourseSearch {
 
     private int year;
-    private int term;
+    private int semester;
     private String grade;
     private String major;
 
-    public CourseSearch(int year, int term, String grade, String major) {
+    public CourseSearch(int year, int semester, String grade, String major) {
         this.year = year;
-        this.term = term;
+        this.semester = semester;
         this.grade = grade;
         this.major = major;
     }

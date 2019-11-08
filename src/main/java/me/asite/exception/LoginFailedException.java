@@ -1,4 +1,4 @@
-package me.asite.service;
+package me.asite.exception;
 
 public class LoginFailedException extends RuntimeException {
     public LoginFailedException() {

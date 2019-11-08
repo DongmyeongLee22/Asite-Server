@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -30,7 +31,7 @@ public class Student {
 
     private String email;
     @OneToMany(mappedBy = "student")
-    private List<Schedule> scheduleList;
+    private List<ScheduleAttendace> scheduleAttendaceList = new ArrayList<>();
 
     @Builder
     public Student(String studentId, String password, String name, String major, String email) {

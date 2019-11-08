@@ -37,7 +37,7 @@ public class CourseRepository {
     public List<Course> findCourses(CourseSearch courseSearch) {
         return queryFactory.selectFrom(course)
                 .where(eqYear(courseSearch.getYear()),
-                        eqTerm(courseSearch.getTerm()),
+                        eqSemester(courseSearch.getSemester()),
                         eqGrade(courseSearch.getGrade()),
                         eqMajor(courseSearch.getMajor()))
                 .fetch();
@@ -50,15 +50,15 @@ public class CourseRepository {
         return course.year.eq(year);
     }
 
-    private BooleanExpression eqTerm(int term) {
-        if (term == 0) {
+    private BooleanExpression eqSemester(int semester) {
+        if (semester == 0) {
             return null;
         }
-        return course.term.eq(term);
+        return course.semester.eq(semester);
     }
 
     private BooleanExpression eqGrade(String grade) {
-        if (grade.equals("전체 학년")) {
+        if (grade.equals("모든 학년")) {
             return null;
         }
         return course.grade.eq(grade);

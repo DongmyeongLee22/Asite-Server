@@ -17,13 +17,13 @@ public class Course {
     @Column(name = "course_id")
     private Long id;
 
-    private int devide;
+    private int number;
 
     private int year;
 
-    private int term;
+    private int semester;
 
-    private String area;
+    private String subject;
 
     private String major;
 
@@ -33,23 +33,23 @@ public class Course {
 
     private String credit;
 
-    private String room;
+    private String location;
 
     private String professor;
 
     private String time;
 
     @Builder
-    public Course(int devide, int year, int term, String area, String major, String grade, String title, String credit, String room, String professor, String time) {
-        this.devide = devide;
+    public Course(int number, int year, int semester, String subject, String major, String grade, String title, String credit, String location, String professor, String time) {
+        this.number = number;
         this.year = year;
-        this.term = term;
-        this.area = area;
+        this.semester = semester;
+        this.subject = subject;
         this.major = major;
         this.grade = grade;
         this.title = title;
         this.credit = credit;
-        this.room = room;
+        this.location = location;
         this.professor = professor;
         this.time = time;
     }
