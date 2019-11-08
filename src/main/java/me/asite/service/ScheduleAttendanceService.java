@@ -1,10 +1,10 @@
 package me.asite.service;
 
 import lombok.RequiredArgsConstructor;
-import me.asite.domain.AttendanceState;
 import me.asite.domain.Course;
-import me.asite.domain.ScheduleAttendace;
+import me.asite.domain.ScheduleAttendance;
 import me.asite.domain.Student;
+import me.asite.domain.state.AttendanceState;
 import me.asite.exception.AttendanceFailException;
 import me.asite.exception.CannotFindByIDException;
 import me.asite.repository.CourseRepository;
@@ -26,39 +26,39 @@ public class ScheduleAttendanceService {
         Student student = studentRepository.findById(studentId).orElseThrow(CannotFindByIDException::new);
         Course course = courseRepository.findOne(courseId);
 
-        ScheduleAttendace scheduleAttendace = ScheduleAttendace.createSchedule(student, course);
+        ScheduleAttendance scheduleAttendance = ScheduleAttendance.createSchedule(student, course);
 
-        scheduleAttendanceRepository.save(scheduleAttendace);
+        scheduleAttendanceRepository.save(scheduleAttendance);
 
-        return scheduleAttendace.getId();
+        return scheduleAttendance.getId();
     }
 
     public void deleteScheduleAttendance(Long scheduleId) {
         scheduleAttendanceRepository.deleteById(scheduleId);
     }
 
-    public void updateScheduleAttendance(Long scheduleId, AttendanceState state) {
-        ScheduleAttendace scheduleAttendace = scheduleAttendanceRepository.findById(scheduleId).orElseThrow(CannotFindByIDException::new);
+    public ScheduleAttendance countAttendance(Long scheduleId, AttendanceState state) {
+        ScheduleAttendance scheduleAttendance = scheduleAttendanceRepository.findById(scheduleId).orElseThrow(CannotFindByIDException::new);
 
-        if (countAttendance(state, scheduleAttendace)) return;
+        if (updateCount(state, scheduleAttendance)) return scheduleAttendance;
 
         throw new AttendanceFailException();
 
     }
 
-    public ScheduleAttendace findOne(Long scheduleId) {
+    public ScheduleAttendance findOne(Long scheduleId) {
         return scheduleAttendanceRepository.findById(scheduleId).orElseThrow(CannotFindByIDException::new);
     }
 
-    private boolean countAttendance(AttendanceState state, ScheduleAttendace scheduleAttendace) {
+    private boolean updateCount(AttendanceState state, ScheduleAttendance scheduleAttendance) {
         if (state == AttendanceState.ATTENDANCE) {
-            scheduleAttendace.setAttendanceCount(scheduleAttendace.getAttendanceCount() + 1);
+            scheduleAttendance.setAttendanceCount(scheduleAttendance.getAttendanceCount() + 1);
             return true;
         } else if (state == AttendanceState.LATELESS) {
-            scheduleAttendace.setLatelessCount(scheduleAttendace.getLatelessCount() + 1);
+            scheduleAttendance.setLatelessCount(scheduleAttendance.getLatelessCount() + 1);
             return true;
         } else if (state == AttendanceState.ABSENT) {
-            scheduleAttendace.setAbsentCount(scheduleAttendace.getAbsentCount() + 1);
+            scheduleAttendance.setAbsentCount(scheduleAttendance.getAbsentCount() + 1);
             return true;
         }
         return false;

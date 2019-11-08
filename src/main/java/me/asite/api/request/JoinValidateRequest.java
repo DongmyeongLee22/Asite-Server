@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class JoinValidateRequest {
 
-    private String studentId;
+    private String studentNumber;
 }

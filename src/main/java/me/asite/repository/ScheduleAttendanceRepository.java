@@ -1,7 +1,7 @@
 package me.asite.repository;
 
-import me.asite.domain.ScheduleAttendace;
+import me.asite.domain.ScheduleAttendance;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ScheduleAttendanceRepository extends JpaRepository<ScheduleAttendace, Long> {
+public interface ScheduleAttendanceRepository extends JpaRepository<ScheduleAttendance, Long> {
 }

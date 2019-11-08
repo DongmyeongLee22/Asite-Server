@@ -58,7 +58,7 @@ public class CourseServiceTest {
         Course course3 = createCourse("전자회로", 2015, 1, "전자공학", "2학년");
 
         CourseSearch courseSearch1 = new CourseSearch(2019, 1, "4학년", "컴퓨터공학");
-        CourseSearch courseSearch2 = new CourseSearch(0, 0, "전체 학년", "");
+        CourseSearch courseSearch2 = new CourseSearch(0, 0, "모든 학년", "");
 
         courseService.courseAdd(course1);
         courseService.courseAdd(course2);

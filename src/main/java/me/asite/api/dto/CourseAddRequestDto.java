@@ -6,10 +6,10 @@ import me.asite.domain.Course;
 
 @Data
 @NoArgsConstructor
-public class CourseDto {
+public class CourseAddRequestDto {
 
     private Long id;
-    private int number;
+    private int classNumber;
     private int year;
     private int semester;
     private String subject;
@@ -21,25 +21,10 @@ public class CourseDto {
     private String professor;
     private String time;
 
-    public CourseDto(Course course) {
-        id = course.getId();
-        number = course.getNumber();
-        year = course.getYear();
-        semester = course.getSemester();
-        subject = course.getSubject();
-        major = course.getMajor();
-        grade = course.getGrade();
-        title = course.getTitle();
-        credit = course.getCredit();
-        location = course.getLocation();
-        professor = course.getProfessor();
-        time = course.getTime();
-    }
-
 
     public Course toEntity() {
         return Course.builder()
-                .number(number)
+                .classNumber(classNumber)
                 .year(year)
                 .semester(semester)
                 .subject(subject)

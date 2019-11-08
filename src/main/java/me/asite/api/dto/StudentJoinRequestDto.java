@@ -11,7 +11,7 @@ import me.asite.domain.Student;
 public class StudentJoinRequestDto {
 
     private String name;
-    private String studentId;
+    private String studentNumber;
     private String password;
     private String major;
     private String email;
@@ -20,7 +20,7 @@ public class StudentJoinRequestDto {
 
         return Student.builder()
                 .name(name)
-                .studentId(studentId)
+                .studentNumber(studentNumber)
                 .password(password)
                 .major(major)
                 .email(email)

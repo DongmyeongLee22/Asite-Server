@@ -1,4 +1,4 @@
-package me.asite.domain;
+package me.asite.domain.state;
 
 public enum FinishState {
     NORMAL,

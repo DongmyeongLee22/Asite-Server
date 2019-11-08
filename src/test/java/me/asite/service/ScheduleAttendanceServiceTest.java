@@ -1,9 +1,12 @@
 package me.asite.service;
 
-import me.asite.domain.AttendanceState;
+import me.asite.api.dto.AttendanceAddRequestDto;
+import me.asite.domain.Attendance;
 import me.asite.domain.Course;
-import me.asite.domain.ScheduleAttendace;
+import me.asite.domain.ScheduleAttendance;
 import me.asite.domain.Student;
+import me.asite.domain.state.AttendanceState;
+import me.asite.domain.state.FinishState;
 import me.asite.exception.CannotFindByIDException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -35,7 +36,7 @@ public class ScheduleAttendanceServiceTest {
     private ScheduleAttendanceService scheduleAttendanceService;
 
     @Autowired
-    private EntityManager em;
+    private AttendanceService attendanceService;
 
     @Test
     public void 시간표_추가() throws Exception {
@@ -44,7 +45,7 @@ public class ScheduleAttendanceServiceTest {
         Long scheduleId1 = getScheduleAttendanceId();
 
         //then
-        ScheduleAttendace findSchedule = scheduleAttendanceService.findOne(scheduleId1);
+        ScheduleAttendance findSchedule = scheduleAttendanceService.findOne(scheduleId1);
 
         assertThat(findSchedule.getAttendanceCount(), equalTo(0));
         assertThat(findSchedule.getAbsentCount(), equalTo(0));
@@ -64,18 +65,27 @@ public class ScheduleAttendanceServiceTest {
         }
 
         @Test
-        public void 시간표_출석_업데이트() throws Exception{
+        public void 출석체크() throws Exception{
             //when
             Long scheduleId1 = getScheduleAttendanceId();
-            scheduleAttendanceService.updateScheduleAttendance(scheduleId1, AttendanceState.ABSENT);
-            scheduleAttendanceService.updateScheduleAttendance(scheduleId1, AttendanceState.LATELESS);
+            AttendanceAddRequestDto attendAddDto = AttendanceAddRequestDto.builder()
+                    .attendanceDate("12-12")
+                    .startTime("10:00")
+                    .endTime("12:00")
+                    .attendanceState(AttendanceState.ATTENDANCE)
+                    .finishState(FinishState.EARLY)
+                    .build();
+            ScheduleAttendance scheduleAttendance = scheduleAttendanceService.countAttendance(scheduleId1, attendAddDto.getAttendanceState());
+
+            attendanceService.attendanceCheck(scheduleAttendance, attendAddDto);
 
             //then
-            ScheduleAttendace findSchedule = scheduleAttendanceService.findOne(scheduleId1);
+            ScheduleAttendance findSchedule = scheduleAttendanceService.findOne(scheduleId1);
+            Attendance findAttendance = findSchedule.getAttendanceList().get(0);
 
-            assertThat(findSchedule.getAttendanceCount(), is(0));
-            assertThat(findSchedule.getLatelessCount(), is(1));
-            assertThat(findSchedule.getAbsentCount(), is(1));
+            assertThat(findSchedule.getAttendanceCount(), is(1));
+            assertThat(findSchedule.getLatelessCount(), is(0));
+            assertThat(findAttendance.getFinishState(), is(FinishState.EARLY));
         }
 
 
@@ -97,9 +107,9 @@ public class ScheduleAttendanceServiceTest {
                 .build();
     }
 
-    private Student createStudent(String studentId, String password, String major) {
+    private Student createStudent(String studentNumber, String password, String major) {
         return Student.builder()
-                .studentId(studentId)
+                .studentNumber(studentNumber)
                 .password(password)
                 .major(major)
                 .build();

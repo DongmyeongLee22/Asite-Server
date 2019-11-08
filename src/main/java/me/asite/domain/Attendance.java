@@ -3,6 +3,8 @@ package me.asite.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.asite.domain.state.AttendanceState;
+import me.asite.domain.state.FinishState;
 
 import javax.persistence.*;
 
@@ -18,7 +20,7 @@ public class Attendance {
 
     @ManyToOne
     @JoinColumn(name = "schedule_attendance_id")
-    private ScheduleAttendace scheduleAttendace;
+    private ScheduleAttendance scheduleAttendance;
 
     private String attendanceDate;
 
@@ -28,20 +30,23 @@ public class Attendance {
 
     private AttendanceState attendanceState;
 
-    public void setScheduleAttendace(ScheduleAttendace scheduleAttendace){
-        this.scheduleAttendace = scheduleAttendace;
-        scheduleAttendace.getAttendanceList().add(this);
+    private FinishState finishState;
+
+    public void setScheduleAttendance(ScheduleAttendance scheduleAttendance){
+        this.scheduleAttendance = scheduleAttendance;
+        scheduleAttendance.getAttendanceList().add(this);
     }
 
-    public static Attendance createAttendnace(ScheduleAttendace scheduleAttendace, String attendanceDate, String startTime
-                                              , String endTime, AttendanceState attendanceState){
+    public static Attendance createAttendnace(ScheduleAttendance scheduleAttendance, String attendanceDate, String startTime
+                                              , String endTime, AttendanceState attendanceState, FinishState finishState){
         Attendance attendance = new Attendance();
         attendance.attendanceDate = attendanceDate;
         attendance.startTime = startTime;
         attendance.endTime = endTime;
         attendance.attendanceState = attendanceState;
+        attendance.finishState = finishState;
 
-        attendance.setScheduleAttendace(scheduleAttendace);
+        attendance.setScheduleAttendance(scheduleAttendance);
 
         return attendance;
     }

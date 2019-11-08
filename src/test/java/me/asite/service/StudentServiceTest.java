@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 
 @RunWith(SpringRunner.class)
@@ -26,41 +25,39 @@ public class StudentServiceTest {
     private EntityManager em;
 
     @Test
-    public void 회원가입() throws Exception{
+    public void 회원가입() throws Exception {
         //given
         Student student = Student.builder()
                 .name("홍길동")
-                .studentId("123123")
+                .studentNumber("123123")
                 .build();
         //when
         studentService.join(student);
         //then
         Student findStudent = studentService.findOne(student.getId());
         assertThat(findStudent.getName()).isEqualTo(student.getName());
-        assertThat(findStudent.getStudentId()).isEqualTo(student.getStudentId());
+        assertThat(findStudent.getStudentNumber()).isEqualTo(student.getStudentNumber());
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void 회원가입_중복확인() throws Exception{
+    @Test
+    public void 회원가입_중복확인() throws Exception {
         //given
         Student student = Student.builder()
                 .name("홍길동")
-                .studentId("123123")
+                .studentNumber("123123")
                 .build();
         Student student2 = Student.builder()
                 .name("엄복동")
-                .studentId("123123")
+                .studentNumber("123123")
                 .build();
         //when
         studentService.join(student);
-        studentService.join(student2);
+        boolean result = studentService.vailidateJoin(student2.getStudentNumber());
+
         //then
+        assertThat(result).isEqualTo(false);
 
-        fail("이미 존재하는 회원이라는 예외메시지가 떠야한다");
-        }
-
-
-
+    }
 
 
 }

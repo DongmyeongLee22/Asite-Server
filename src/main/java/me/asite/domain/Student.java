@@ -21,7 +21,7 @@ public class Student {
     @Column(name = "member_id")
     private Long id;
 
-    private String studentId;
+    private String studentNumber;
 
     private String password;
 
@@ -31,11 +31,11 @@ public class Student {
 
     private String email;
     @OneToMany(mappedBy = "student")
-    private List<ScheduleAttendace> scheduleAttendaceList = new ArrayList<>();
+    private List<ScheduleAttendance> scheduleAttendanceList = new ArrayList<>();
 
     @Builder
-    public Student(String studentId, String password, String name, String major, String email) {
-        this.studentId = studentId;
+    public Student(String studentNumber, String password, String name, String major, String email) {
+        this.studentNumber = studentNumber;
         this.password = password;
         this.name = name;
         this.major = major;

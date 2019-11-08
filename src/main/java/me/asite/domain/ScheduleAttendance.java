@@ -6,15 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ScheduleAttendace {
+public class ScheduleAttendance {
 
     @Id
     @GeneratedValue
@@ -29,8 +31,8 @@ public class ScheduleAttendace {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "scheduleAttendace")
-    private List<Attendance> attendanceList;
+    @OneToMany(mappedBy = "scheduleAttendance", cascade = ALL)
+    private List<Attendance> attendanceList = new ArrayList<>();
 
     private Integer attendanceCount;
 
@@ -42,7 +44,7 @@ public class ScheduleAttendace {
     //--- 연관관계 편의 메서드 ---//
     public void setStudent(Student student){
         this.student = student;
-        student.getScheduleAttendaceList().add(this);
+        student.getScheduleAttendanceList().add(this);
     }
 
     public void setCourse(Course course){
@@ -51,15 +53,15 @@ public class ScheduleAttendace {
 
 
     //--- 생성 메서드 ---//
-    public static ScheduleAttendace createSchedule(Student student, Course course){
-            ScheduleAttendace scheduleAttendace = new ScheduleAttendace();
-            scheduleAttendace.setStudent(student);
-            scheduleAttendace.setCourse(course);
-            scheduleAttendace.attendanceCount = 0;
-            scheduleAttendace.latelessCount = 0;
-            scheduleAttendace.absentCount = 0;
+    public static ScheduleAttendance createSchedule(Student student, Course course){
+            ScheduleAttendance scheduleAttendance = new ScheduleAttendance();
+            scheduleAttendance.setStudent(student);
+            scheduleAttendance.setCourse(course);
+            scheduleAttendance.attendanceCount = 0;
+            scheduleAttendance.latelessCount = 0;
+            scheduleAttendance.absentCount = 0;
 
-            return scheduleAttendace;
+            return scheduleAttendance;
     }
 
 

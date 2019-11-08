@@ -1,6 +1,9 @@
 package me.asite.service;
 
 import lombok.RequiredArgsConstructor;
+import me.asite.api.dto.StudentLoginRequestDto;
+import me.asite.api.response.IsSuccessReponse;
+import me.asite.api.response.LoginResponseDto;
 import me.asite.domain.Student;
 import me.asite.exception.LoginFailedException;
 import me.asite.repository.StudentRepository;
@@ -16,31 +19,33 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    public Student join(Student student) {
-        validateDuplicateStudent(student);
-        return studentRepository.save(student);
-    }
+    public IsSuccessReponse join(Student student) {
+        try {
 
-    public boolean vailidateJoin(String studentId) {
-        List<Student> students = studentRepository.findAllByStudentId(studentId);
-        return students.isEmpty();
-    }
+            studentRepository.save(student);
+            return new IsSuccessReponse(true);
 
+        } catch (IllegalStateException e) {
 
-    private void validateDuplicateStudent(Student student) {
-        List<Student> students = studentRepository.findAllByStudentId(student.getStudentId());
-        if (!students.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원 입니다.");
+            return new IsSuccessReponse(false);
+
         }
     }
 
+    public boolean vailidateJoin(String studentNumber) {
+        List<Student> students = studentRepository.findAllBystudentNumber(studentNumber);
+        return students.isEmpty();
+    }
 
     public Student findOne(Long studentId) {
         return studentRepository.findById(studentId).orElseThrow(() -> new LoginFailedException("로그인 실패"));
     }
 
-    public boolean login(String sudentId, String password) {
-        List<Student> students = studentRepository.findAllByStudentIdAndPassword(sudentId, password);
-        return !students.isEmpty();
+    public LoginResponseDto login(StudentLoginRequestDto dto) {
+        List<Student> students = studentRepository.findAllBystudentNumberAndPassword(dto.getStudentNumber(), dto.getPassword());
+        if (!students.isEmpty()) {
+            return new LoginResponseDto(true, students.get(0).getId(), students.get(0).getName());
+        }
+        return new LoginResponseDto(false, null, null);
     }
 }
