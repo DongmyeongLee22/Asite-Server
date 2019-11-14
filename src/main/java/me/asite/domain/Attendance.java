@@ -3,8 +3,8 @@ package me.asite.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.asite.domain.state.AttendanceEndState;
 import me.asite.domain.state.AttendanceState;
-import me.asite.domain.state.FinishState;
 
 import javax.persistence.*;
 
@@ -19,8 +19,8 @@ public class Attendance {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "schedule_attendance_id")
-    private ScheduleAttendance scheduleAttendance;
+    @JoinColumn(name = "timetable_id")
+    private Timetable timetable;
 
     private String attendanceDate;
 
@@ -30,23 +30,23 @@ public class Attendance {
 
     private AttendanceState attendanceState;
 
-    private FinishState finishState;
+    private AttendanceEndState attendanceEndState;
 
-    public void setScheduleAttendance(ScheduleAttendance scheduleAttendance){
-        this.scheduleAttendance = scheduleAttendance;
-        scheduleAttendance.getAttendanceList().add(this);
+    public void setTimetable(Timetable timetable){
+        this.timetable = timetable;
+        timetable.getAttendanceList().add(this);
     }
 
-    public static Attendance createAttendnace(ScheduleAttendance scheduleAttendance, String attendanceDate, String startTime
-                                              , String endTime, AttendanceState attendanceState, FinishState finishState){
+    public static Attendance createAttendnace(Timetable timetable, String attendanceDate, String startTime
+                                              , String endTime, AttendanceState attendanceState, AttendanceEndState attendanceEndState){
         Attendance attendance = new Attendance();
         attendance.attendanceDate = attendanceDate;
         attendance.startTime = startTime;
         attendance.endTime = endTime;
         attendance.attendanceState = attendanceState;
-        attendance.finishState = finishState;
+        attendance.attendanceEndState = attendanceEndState;
 
-        attendance.setScheduleAttendance(scheduleAttendance);
+        attendance.setTimetable(timetable);
 
         return attendance;
     }

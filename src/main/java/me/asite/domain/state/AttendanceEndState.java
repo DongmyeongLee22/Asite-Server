@@ -1,6 +1,6 @@
 package me.asite.domain.state;
 
-public enum FinishState {
+public enum AttendanceEndState {
     NORMAL,
     EARLY
 }

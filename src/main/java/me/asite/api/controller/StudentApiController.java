@@ -26,7 +26,6 @@ public class StudentApiController {
     public IsSuccessReponse validateJoin(@RequestBody JoinValidateRequest dto) {
         return new IsSuccessReponse(studentService.vailidateJoin(dto.getStudentNumber()));
     }
-
     @PostMapping("/student/login")
     public LoginResponseDto login(@RequestBody StudentLoginRequestDto dto) {
         return studentService.login(dto);

@@ -16,11 +16,11 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ScheduleAttendance {
+public class Timetable {
 
     @Id
     @GeneratedValue
-    @Column(name = "schedule_attendance_id")
+    @Column(name = "timetable_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
@@ -31,20 +31,20 @@ public class ScheduleAttendance {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "scheduleAttendance", cascade = ALL)
+    @OneToMany(mappedBy = "timetable", cascade = ALL)
     private List<Attendance> attendanceList = new ArrayList<>();
 
-    private Integer attendanceCount;
+    private int attendanceCount;
 
-    private Integer latelessCount;
+    private int latelessCount;
 
-    private Integer absentCount;
+    private int absentCount;
 
 
     //--- 연관관계 편의 메서드 ---//
     public void setStudent(Student student){
         this.student = student;
-        student.getScheduleAttendanceList().add(this);
+        student.getTimetableList().add(this);
     }
 
     public void setCourse(Course course){
@@ -53,15 +53,15 @@ public class ScheduleAttendance {
 
 
     //--- 생성 메서드 ---//
-    public static ScheduleAttendance createSchedule(Student student, Course course){
-            ScheduleAttendance scheduleAttendance = new ScheduleAttendance();
-            scheduleAttendance.setStudent(student);
-            scheduleAttendance.setCourse(course);
-            scheduleAttendance.attendanceCount = 0;
-            scheduleAttendance.latelessCount = 0;
-            scheduleAttendance.absentCount = 0;
+    public static Timetable createTimetable(Student student, Course course){
+            Timetable timetable = new Timetable();
+            timetable.setStudent(student);
+            timetable.setCourse(course);
+            timetable.attendanceCount = 0;
+            timetable.latelessCount = 0;
+            timetable.absentCount = 0;
 
-            return scheduleAttendance;
+            return timetable;
     }
 
 

@@ -2,8 +2,8 @@ package me.asite.api.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import me.asite.domain.state.AttendanceEndState;
 import me.asite.domain.state.AttendanceState;
-import me.asite.domain.state.FinishState;
 
 @Data
 public class AttendanceAddRequestDto {
@@ -13,14 +13,14 @@ public class AttendanceAddRequestDto {
     private String startTime;
     private String endTime;
     private AttendanceState attendanceState;
-    private FinishState finishState;
+    private AttendanceEndState attendanceEndState;
 
     @Builder
-    public AttendanceAddRequestDto(String attendanceDate, String startTime, String endTime, AttendanceState attendanceState, FinishState finishState) {
+    public AttendanceAddRequestDto(String attendanceDate, String startTime, String endTime, AttendanceState attendanceState, AttendanceEndState attendanceEndState) {
         this.attendanceDate = attendanceDate;
         this.startTime = startTime;
         this.endTime = endTime;
         this.attendanceState = attendanceState;
-        this.finishState = finishState;
+        this.attendanceEndState = attendanceEndState;
     }
 }

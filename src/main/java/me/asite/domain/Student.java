@@ -18,7 +18,7 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "student_id")
     private Long id;
 
     private String studentNumber;
@@ -30,8 +30,9 @@ public class Student {
     private String major;
 
     private String email;
+
     @OneToMany(mappedBy = "student")
-    private List<ScheduleAttendance> scheduleAttendanceList = new ArrayList<>();
+    private List<Timetable> timetableList = new ArrayList<>();
 
     @Builder
     public Student(String studentNumber, String password, String name, String major, String email) {
