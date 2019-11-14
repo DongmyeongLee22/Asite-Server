@@ -1,13 +1,13 @@
 package me.asite.service;
 
-import me.asite.api.dto.AttendanceAddRequestDto;
-import me.asite.domain.Attendance;
-import me.asite.domain.Course;
-import me.asite.domain.Student;
-import me.asite.domain.Timetable;
-import me.asite.domain.state.AttendanceEndState;
-import me.asite.domain.state.AttendanceState;
+import me.asite.attendance.*;
+import me.asite.course.Course;
+import me.asite.course.CourseService;
 import me.asite.exception.CannotFindByIDException;
+import me.asite.student.Student;
+import me.asite.student.StudentService;
+import me.asite.timetable.Timetable;
+import me.asite.timetable.TimetableService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

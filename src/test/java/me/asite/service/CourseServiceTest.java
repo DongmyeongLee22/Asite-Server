@@ -1,8 +1,9 @@
 package me.asite.service;
 
-import me.asite.api.controller.CourseSearch;
-import me.asite.domain.Course;
-import me.asite.repository.CourseRepository;
+import me.asite.course.Course;
+import me.asite.course.CourseRepository;
+import me.asite.course.CourseSearch;
+import me.asite.course.CourseService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

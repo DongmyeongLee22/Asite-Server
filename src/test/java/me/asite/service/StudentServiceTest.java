@@ -1,6 +1,7 @@
 package me.asite.service;
 
-import me.asite.domain.Student;
+import me.asite.student.Student;
+import me.asite.student.StudentService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
