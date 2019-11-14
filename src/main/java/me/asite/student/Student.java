@@ -1,20 +1,22 @@
 package me.asite.student;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import me.asite.timetable.Timetable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
+@Builder
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 public class Student {
 
     @Id
@@ -22,6 +24,7 @@ public class Student {
     @Column(name = "student_id")
     private Long id;
 
+    @Column(unique = true)
     private String studentNumber;
 
     private String password;
@@ -31,6 +34,10 @@ public class Student {
     private String major;
 
     private String email;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<StudentRole> roles;
 
     @OneToMany(mappedBy = "student")
     private List<Timetable> timetableList = new ArrayList<>();
@@ -42,5 +49,9 @@ public class Student {
         this.name = name;
         this.major = major;
         this.email = email;
+    }
+
+    public void encodingPassword(String encode) {
+        this.password = encode;
     }
 }

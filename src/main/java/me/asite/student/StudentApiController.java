@@ -1,28 +1,41 @@
 package me.asite.student;
 
 import lombok.RequiredArgsConstructor;
-import me.asite.common.IsSuccessReponse;
+import me.asite.student.dto.StudentJoinRequestDto;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController
+import javax.validation.Valid;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
+@Controller
+@RequestMapping(value = "/api/student", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
 public class StudentApiController {
 
     private final StudentService studentService;
 
-    @PostMapping("/student/join")
-    public IsSuccessReponse joinStudent(@RequestBody StudentJoinRequestDto dto) {
-            return studentService.join(dto.toEntity());
+    @PostMapping("/join")
+    public ResponseEntity joinStudent(@RequestBody @Valid StudentJoinRequestDto joinRequestDto,
+                                      Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Student student = studentService.join(joinRequestDto);
+        StudentResource studentResource = new StudentResource(student);
+        studentResource.add(linkTo(StudentApiController.class).slash("login").withRel("login"));
+        studentResource.add(new Link("/docs/index.html#resources-student-join").withRel("profile"));
+
+        return ResponseEntity.ok().body(studentResource);
+
     }
 
-    @PostMapping("/student/join/validate")
-    public IsSuccessReponse validateJoin(@RequestBody JoinValidateRequest dto) {
-        return new IsSuccessReponse(studentService.vailidateJoin(dto.getStudentNumber()));
-    }
-    @PostMapping("/student/login")
-    public LoginResponseDto login(@RequestBody StudentLoginRequestDto dto) {
-        return studentService.login(dto);
-    }
 }

@@ -1,47 +1,49 @@
 package me.asite.student;
 
 import lombok.RequiredArgsConstructor;
-import me.asite.common.IsSuccessReponse;
-import me.asite.exception.LoginFailedException;
+import me.asite.student.dto.StudentJoinRequestDto;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class StudentService {
+public class StudentService implements UserDetailsService {
 
     private final StudentRepository studentRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
-    public IsSuccessReponse join(Student student) {
-        try {
 
-            studentRepository.save(student);
-            return new IsSuccessReponse(true);
-
-        } catch (IllegalStateException e) {
-
-            return new IsSuccessReponse(false);
-
-        }
+    public Student join(StudentJoinRequestDto joinRequestDto) {
+        Student student = modelMapper.map(joinRequestDto, Student.class);
+        student.encodingPassword(this.passwordEncoder.encode(student.getPassword()));
+        return this.studentRepository.save(student);
     }
 
-    public boolean vailidateJoin(String studentNumber) {
-        List<Student> students = studentRepository.findAllBystudentNumber(studentNumber);
-        return students.isEmpty();
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Student student = studentRepository.findByStudentNumber(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        return new User(student.getStudentNumber(), student.getPassword(), authorities(student.getRoles()));
     }
 
-    public Student findOne(Long studentId) {
-        return studentRepository.findById(studentId).orElseThrow(() -> new LoginFailedException("로그인 실패"));
-    }
-
-    public LoginResponseDto login(StudentLoginRequestDto dto) {
-        List<Student> students = studentRepository.findAllBystudentNumberAndPassword(dto.getStudentNumber(), dto.getPassword());
-        if (!students.isEmpty()) {
-            return new LoginResponseDto(true, students.get(0).getId(), students.get(0).getName());
-        }
-        return new LoginResponseDto(false, null, null);
+    private Collection<? extends GrantedAuthority> authorities(Set<StudentRole> roles) {
+        return roles.stream()
+                .map(r -> new SimpleGrantedAuthority("ROLS_" + r.name()))
+                .collect(Collectors.toSet());
     }
 }
