@@ -18,7 +18,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 @Controller
 @RequestMapping(value = "/api/student", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
-public class StudentApiController {
+public class StudentController {
 
     private final StudentService studentService;
 
@@ -31,7 +31,7 @@ public class StudentApiController {
 
         Student student = studentService.join(joinRequestDto);
         StudentResource studentResource = new StudentResource(student);
-        studentResource.add(linkTo(StudentApiController.class).slash("login").withRel("login"));
+        studentResource.add(linkTo(StudentController.class).slash("login").withRel("login"));
         studentResource.add(new Link("/docs/index.html#resources-student-join").withRel("profile"));
 
         return ResponseEntity.ok().body(studentResource);

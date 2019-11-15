@@ -12,3 +12,12 @@ spring:
   profiles: local
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+logging.level:
+  org.hibernate.SQL: debug
+
+my-app:
+  client-secret: password
+  client-id: myApp

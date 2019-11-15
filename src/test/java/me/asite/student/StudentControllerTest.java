@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class StudentApiControllerTest extends BaseControllerTest {
+public class StudentControllerTest extends BaseControllerTest {
 
     @Autowired
     StudentService studentService;
@@ -35,11 +35,11 @@ public class StudentApiControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void 회원가입() throws Exception {
+    public void student_Join() throws Exception {
         //given
         StudentJoinRequestDto studentDto = getStudentDto();
 
-        //when
+        //when && then
         this.mockMvc.perform(post("/api/student/join")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
@@ -82,7 +82,6 @@ public class StudentApiControllerTest extends BaseControllerTest {
                         )
                 ));
 
-        //then
     }
 
     private StudentJoinRequestDto getStudentDto() {

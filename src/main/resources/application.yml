@@ -22,6 +22,10 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
 
+my-app:
+  client-id: myApp
+  client-secret: password
+
 ---
 spring.profiles: set1
 spring.profiles.include: real-db

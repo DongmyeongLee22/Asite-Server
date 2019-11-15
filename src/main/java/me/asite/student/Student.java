@@ -42,15 +42,6 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<Timetable> timetableList = new ArrayList<>();
 
-    @Builder
-    public Student(String studentNumber, String password, String name, String major, String email) {
-        this.studentNumber = studentNumber;
-        this.password = password;
-        this.name = name;
-        this.major = major;
-        this.email = email;
-    }
-
     public void encodingPassword(String encode) {
         this.password = encode;
     }
