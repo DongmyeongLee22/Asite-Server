@@ -1,7 +1,8 @@
-package me.asite.course;
+package me.asite.course.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.asite.course.Course;
 
 @Data
 @NoArgsConstructor

@@ -1,45 +1,34 @@
-package me.asite.course;
+package me.asite.course.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import me.asite.course.Course;
+import me.asite.course.dto.CourseSearch;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static me.asite.course.QCourse.course;
 
 
-@Repository
 @RequiredArgsConstructor
-public class CourseRepository {
-
-    private final EntityManager em;
+@Repository
+public class CourseRepositoryImpl implements CourseRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public void save(Course course) {
-        em.persist(course);
-    }
-
-    public Course findOne(Long courseId) {
-        return em.find(Course.class, courseId);
-    }
-
-    public List<Course> findAll() {
-        return em.createQuery("select c from Course c", Course.class).getResultList();
-    }
-
-
+    @Override
     public List<Course> findCourses(CourseSearch courseSearch) {
-        return queryFactory.selectFrom(course)
+        List<Course> fetch = queryFactory.selectFrom(course)
                 .where(eqYear(courseSearch.getYear()),
                         eqSemester(courseSearch.getSemester()),
                         eqGrade(courseSearch.getGrade()),
                         eqMajor(courseSearch.getMajor()))
                 .fetch();
+
+        return fetch;
     }
 
     private BooleanExpression eqYear(int year) {

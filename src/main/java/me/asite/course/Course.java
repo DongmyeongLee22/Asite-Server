@@ -1,15 +1,16 @@
 package me.asite.course;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+@Builder
 public class Course {
 
     @Id
@@ -29,18 +30,4 @@ public class Course {
     private String professor;
     private String time;
 
-    @Builder
-    public Course(int classNumber, int year, int semester, String subject, String major, String grade, String title, String credit, String location, String professor, String time) {
-        this.classNumber = classNumber;
-        this.year = year;
-        this.semester = semester;
-        this.subject = subject;
-        this.major = major;
-        this.grade = grade;
-        this.title = title;
-        this.credit = credit;
-        this.location = location;
-        this.professor = professor;
-        this.time = time;
-    }
 }

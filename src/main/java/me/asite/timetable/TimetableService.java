@@ -3,7 +3,7 @@ package me.asite.timetable;
 import lombok.RequiredArgsConstructor;
 import me.asite.attendance.AttendanceState;
 import me.asite.course.Course;
-import me.asite.course.CourseRepository;
+import me.asite.course.repository.CourseRepository;
 import me.asite.exception.AttendanceFailException;
 import me.asite.exception.CannotFindByIDException;
 import me.asite.student.Student;
@@ -24,7 +24,7 @@ public class TimetableService {
 
     public Long addTimetable(Long studentId, Long courseId) {
         Student student = studentRepository.findById(studentId).orElseThrow(CannotFindByIDException::new);
-        Course course = courseRepository.findOne(courseId);
+        Course course = courseRepository.findById(courseId).get();
 
         Timetable timetable = Timetable.createTimetable(student, course);
 

@@ -1,4 +1,4 @@
-package me.asite.course;
+package me.asite.course.dto;
 
 import lombok.Data;
 
