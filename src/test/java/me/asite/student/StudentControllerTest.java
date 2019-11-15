@@ -89,7 +89,7 @@ public class StudentControllerTest extends BaseControllerTest {
                 .studentNumber("201412341")
                 .password("password")
                 .email("test@email.com")
-                .major("컴퓨터 공학과")
+                .major("컴퓨터공학과")
                 .name("홍길동")
                 .roles(Collections.singleton(StudentRole.USER))
                 .build();

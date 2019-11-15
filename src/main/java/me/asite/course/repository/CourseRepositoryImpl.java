@@ -1,11 +1,13 @@
 package me.asite.course.repository;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import me.asite.course.Course;
 import me.asite.course.dto.CourseSearch;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -13,22 +15,35 @@ import java.util.List;
 import static me.asite.course.QCourse.course;
 
 
-@RequiredArgsConstructor
-@Repository
-public class CourseRepositoryImpl implements CourseRepositoryCustom {
+public class CourseRepositoryImpl extends QuerydslRepositorySupport implements CourseRepositoryCustom {
 
-    private final JPAQueryFactory queryFactory;
+
+    public CourseRepositoryImpl() {
+        super(Course.class);
+    }
 
     @Override
     public List<Course> findCourses(CourseSearch courseSearch) {
-        List<Course> fetch = queryFactory.selectFrom(course)
-                .where(eqYear(courseSearch.getYear()),
+        return from(course)
+                .where(
+                        eqYear(courseSearch.getYear()),
                         eqSemester(courseSearch.getSemester()),
                         eqGrade(courseSearch.getGrade()),
                         eqMajor(courseSearch.getMajor()))
                 .fetch();
 
-        return fetch;
+    }
+
+    @Override
+    public Page<Course> findCourses(CourseSearch courseSearch, Pageable pageable) {
+        QueryResults<Course> courseQueryResults = from(course)
+                .where(
+                        eqYear(courseSearch.getYear()),
+                        eqSemester(courseSearch.getSemester()),
+                        eqGrade(courseSearch.getGrade()),
+                        eqMajor(courseSearch.getMajor()))
+                .fetchResults();
+        return new PageImpl<>(courseQueryResults.getResults(), pageable, courseQueryResults.getTotal());
     }
 
     private BooleanExpression eqYear(int year) {

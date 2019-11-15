@@ -6,6 +6,8 @@ import me.asite.course.dto.CourseSearch;
 import me.asite.course.repository.CourseRepository;
 import me.asite.exception.CannotFindByIDException;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,5 +34,9 @@ public class CourseService {
 
     public List<Course> findCourses(CourseSearch courseSearch) {
         return courseRepository.findCourses(courseSearch);
+    }
+
+    public Page<Course> findCourses(CourseSearch courseSearch, Pageable pageable) {
+        return courseRepository.findCourses(courseSearch, pageable);
     }
 }
