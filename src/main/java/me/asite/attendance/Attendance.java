@@ -1,9 +1,6 @@
 package me.asite.attendance;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import me.asite.timetable.Timetable;
 
 import javax.persistence.*;
@@ -11,6 +8,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Attendance {
 

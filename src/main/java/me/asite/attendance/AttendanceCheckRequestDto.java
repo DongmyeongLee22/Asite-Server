@@ -18,9 +18,5 @@ public class AttendanceCheckRequestDto {
     private String startTime;
     @NotEmpty
     private String endTime;
-    @NotEmpty
-    private AttendanceState attendanceState;
-    @NotEmpty
-    private AttendanceEndState attendanceEndState;
 
 }

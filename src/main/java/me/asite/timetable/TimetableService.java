@@ -8,7 +8,6 @@ import me.asite.exception.AttendanceFailException;
 import me.asite.exception.CannotFindByIDException;
 import me.asite.student.Student;
 import me.asite.student.StudentRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,6 @@ public class TimetableService {
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
     private final AttendanceRepository attendanceRepository;
-    private final ModelMapper modelMapper;
 
     public Timetable addTimetable(Long studentId, Long courseId) {
 
@@ -35,16 +33,16 @@ public class TimetableService {
         return timetableRepository.save(timetable);
     }
 
-    public void deleteTimetable(Long timetableId) {
-        timetableRepository.deleteById(timetableId);
-    }
+    public Timetable attendanceCheck(Long timetableId, AttendanceCheckRequestDto dto) {
 
-    public Timetable updateTimetableAndAttendanceCheck(Long timetableId, AttendanceCheckRequestDto dto) {
+        Timetable timetable = timetableRepository.findByIdWithStudentAndCourse(timetableId).orElseThrow(CannotFindByIDException::new);
 
-        Timetable timetable = timetableRepository.findById(timetableId).orElseThrow(CannotFindByIDException::new);
+        String courseTime = timetable.getCourse().getTime();
+        AttendanceState attendanceState = verifyAttendanceState(courseTime);
+        AttendanceEndState attendanceEndState = verifyAttendanceEndState(courseTime);
 
-        if (attendanceCheck(timetable, dto.getAttendanceState(), dto.getAttendanceEndState())) {
-            Attendance attendance = modelMapper.map(dto, Attendance.class);
+        if (attendanceCheck(timetable, attendanceState, attendanceEndState)) {
+            Attendance attendance = makeAttendance(dto, attendanceState, attendanceEndState);
             timetable.addAttendance(attendance);
             attendanceRepository.save(attendance);
             return timetable;
@@ -52,6 +50,25 @@ public class TimetableService {
 
         throw new AttendanceFailException();
 
+    }
+
+    private Attendance makeAttendance(AttendanceCheckRequestDto dto, AttendanceState attendanceState, AttendanceEndState attendanceEndState) {
+        return Attendance.builder()
+                .attendanceDate(dto.getAttendanceDate())
+                .startTime(dto.getStartTime())
+                .endTime(dto.getEndTime())
+                .attendanceState(attendanceState)
+                .attendanceEndState(attendanceEndState).build();
+    }
+
+    private AttendanceEndState verifyAttendanceEndState(String courseTime) {
+        //TODO 출석시간에 맞에 출석상태를 검증해야함
+        return AttendanceEndState.EARLY;
+    }
+
+    private AttendanceState verifyAttendanceState(String courseTime) {
+        //TODO 출석시간에 맞에 출석상태를 검증해야함
+        return AttendanceState.ATTENDANCE;
     }
 
     public Timetable findOne(Long timetableId) {

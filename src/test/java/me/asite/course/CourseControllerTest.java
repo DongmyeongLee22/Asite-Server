@@ -120,8 +120,9 @@ public class CourseControllerTest extends BaseControllerTest {
 
                         )
                 ));
-
     }
+
+
 
     private String findAccessToken() throws Exception {
         String studentNumber = "201412341";

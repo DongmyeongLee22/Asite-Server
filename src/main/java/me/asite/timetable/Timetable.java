@@ -1,12 +1,12 @@
 package me.asite.timetable;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.*;
 import me.asite.attendance.Attendance;
+import me.asite.attendance.AttendanceListSerializer;
 import me.asite.course.Course;
 import me.asite.student.Student;
+import me.asite.student.StudentSerializer;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id")
 public class Timetable {
 
     @Id
@@ -28,6 +29,7 @@ public class Timetable {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "student_id")
+    @JsonSerialize(using = StudentSerializer.class)
     private Student student;
 
     @ManyToOne(fetch = LAZY)
@@ -35,6 +37,7 @@ public class Timetable {
     private Course course;
 
     @OneToMany(mappedBy = "timetable", cascade = ALL)
+    @JsonSerialize(using = AttendanceListSerializer.class)
     private List<Attendance> attendanceList = new ArrayList<>();
 
     private int attendanceCount;

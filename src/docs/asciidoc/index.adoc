@@ -121,3 +121,14 @@ operation::get-aouthToken[snippets='request-headers,request-parameters,http-requ
 `GET` 요청을 사용해서 강의 목록을 조회할 수 있다.
 
 operation::query-courses[snippets='request-headers,request-fields,http-request,response-headers,response-fields,http-response,links']
+
+[[resources-timetable]]
+== 시간표
+
+시간표는 학생들의 시간표와 각 시간표의 수업에 출석 횟수(정상출석, 지각, 결석, 빠른종료)를 보여주기 위해 사용된다.
+
+=== 시간표 추가
+
+`POST` 요청을 사용해서 시간표를 추가할 수 있다.
+
+operation::add-timetable[snippets='request-headers,request-fields,http-request,response-headers,response-fields,http-response,links']
