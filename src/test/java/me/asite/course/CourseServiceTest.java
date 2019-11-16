@@ -4,6 +4,7 @@ import me.asite.course.dto.CourseAddRequestDto;
 import me.asite.course.dto.CourseSearch;
 import me.asite.course.repository.CourseRepository;
 import me.asite.exception.CannotFindByIDException;
+import me.asite.student.StudentRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +27,14 @@ public class CourseServiceTest {
     @Autowired
     CourseService courseService;
 
+    @Autowired
+    StudentRepository studentRepository;
+
+
     @After
     public void celanUp() {
         courseRepository.deleteAll();
+        studentRepository.deleteAll();
     }
 
     @Test

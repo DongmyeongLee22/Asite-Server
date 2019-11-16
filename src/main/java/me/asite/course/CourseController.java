@@ -24,19 +24,21 @@ public class CourseController {
     private final CourseService courseService;
 
 
+
     @GetMapping
     public ResponseEntity query_Courses(@RequestBody CourseSearch courseSearch,
                                         Pageable pageable,
                                         PagedResourcesAssembler<Course> assembler,
                                         Errors errors) {
-
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
         Page<Course> coursesPage = courseService.findCourses(courseSearch, pageable);
-        PagedResources<CourseResouce> courseResouces = assembler.toResource(coursesPage, CourseResouce::new);
-        courseResouces.add(new Link("/docs/index.html#resource-course-list").withRel("profile"));
+
+        PagedResources courseResouces = assembler.toResource(coursesPage, CourseResource::new);
+
+        courseResouces.add(new Link("/docs/index.html#resource-courses-list").withRel("profile"));
 
         return ResponseEntity.ok(courseResouces);
     }
