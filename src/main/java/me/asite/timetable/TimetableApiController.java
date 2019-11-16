@@ -1,7 +1,7 @@
 package me.asite.timetable;
 
 import lombok.RequiredArgsConstructor;
-import me.asite.attendance.AttendanceAddRequestDto;
+import me.asite.attendance.AttendanceCheckRequestDto;
 import me.asite.attendance.AttendanceService;
 import me.asite.common.IsSuccessReponse;
 import me.asite.exception.AttendanceFailException;
@@ -31,11 +31,8 @@ public class TimetableApiController {
 
     @PutMapping("/timetable/attendancecheck/{timetableId}")
     public IsSuccessReponse attendanceCheck(@PathVariable("timetableId") Long timetableId,
-                                            @RequestBody AttendanceAddRequestDto dto) {
+                                            @RequestBody AttendanceCheckRequestDto dto) {
         try {
-
-            Timetable timetable = timetableService.countAttendance(timetableId, dto.getAttendanceState());
-            attendanceService.attendanceCheck(timetable, dto);
             return new IsSuccessReponse(true);
 
         } catch (AttendanceFailException e) {

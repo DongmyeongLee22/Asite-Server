@@ -2,7 +2,7 @@ package me.asite.exception;
 
 public class CannotFindByIDException extends RuntimeException {
     public CannotFindByIDException() {
-        super();
+        super("아이디에 맞는 데이터가 없습니다.");
     }
 
     public CannotFindByIDException(String message) {

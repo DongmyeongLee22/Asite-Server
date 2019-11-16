@@ -3,12 +3,14 @@ package me.asite.attendance;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import me.asite.timetable.Timetable;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Attendance {
 
@@ -31,24 +33,7 @@ public class Attendance {
 
     private AttendanceEndState attendanceEndState;
 
-    public void setTimetable(Timetable timetable){
+    public void setTimetable(Timetable timetable) {
         this.timetable = timetable;
-        timetable.getAttendanceList().add(this);
     }
-
-    public static Attendance createAttendnace(Timetable timetable, String attendanceDate, String startTime
-                                              , String endTime, AttendanceState attendanceState, AttendanceEndState attendanceEndState){
-        Attendance attendance = new Attendance();
-        attendance.attendanceDate = attendanceDate;
-        attendance.startTime = startTime;
-        attendance.endTime = endTime;
-        attendance.attendanceState = attendanceState;
-        attendance.attendanceEndState = attendanceEndState;
-
-        attendance.setTimetable(timetable);
-
-        return attendance;
-    }
-
-
 }

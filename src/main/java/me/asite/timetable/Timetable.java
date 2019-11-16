@@ -43,6 +43,7 @@ public class Timetable {
 
     private int absentCount;
 
+    private int earlyEnd;
 
     //--- 연관관계 편의 메서드 ---//
     public void setStudent(Student student){
@@ -54,7 +55,6 @@ public class Timetable {
         this.course = course;
     }
 
-
     //--- 생성 메서드 ---//
     public static Timetable createTimetable(Student student, Course course){
             Timetable timetable = new Timetable();
@@ -63,9 +63,14 @@ public class Timetable {
             timetable.attendanceCount = 0;
             timetable.latelessCount = 0;
             timetable.absentCount = 0;
+        timetable.earlyEnd = 0;
 
             return timetable;
     }
 
+    public void addAttendance(Attendance attendance) {
+        this.attendanceList.add(attendance);
+        attendance.setTimetable(this);
+    }
 
 }

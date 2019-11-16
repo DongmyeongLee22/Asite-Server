@@ -40,6 +40,7 @@ public class Student {
     private Set<StudentRole> roles;
 
     @OneToMany(mappedBy = "student")
+    @Builder.Default
     private List<Timetable> timetableList = new ArrayList<>();
 
     public void encodingPassword(String encode) {
