@@ -52,6 +52,24 @@ public class TimetableService {
 
     }
 
+    public void deleteTimetable(Long timetabeId) {
+        if (!timetableRepository.existsById(timetabeId)) {
+            throw new CannotFindByIDException("시간표가 존재하지 않습니다.");
+        }
+        timetableRepository.deleteById(timetabeId);
+    }
+
+    public List<Timetable> findAllWithCourseByStudentId(Long studentId) {
+        if (!studentRepository.existsById(studentId)) {
+            throw new CannotFindByIDException("학생이 존재하지 않습니다.");
+        }
+        return timetableRepository.findAllWithCourseByStudentId(studentId);
+    }
+
+    public Timetable findOne(Long timetableId) {
+        return timetableRepository.findById(timetableId).orElseThrow(CannotFindByIDException::new);
+    }
+
     private Attendance makeAttendance(AttendanceCheckRequestDto dto, AttendanceState attendanceState, AttendanceEndState attendanceEndState) {
         return Attendance.builder()
                 .attendanceDate(dto.getAttendanceDate())
@@ -69,10 +87,6 @@ public class TimetableService {
     private AttendanceState verifyAttendanceState(String courseTime) {
         //TODO 출석시간에 맞에 출석상태를 검증해야함
         return AttendanceState.ATTENDANCE;
-    }
-
-    public Timetable findOne(Long timetableId) {
-        return timetableRepository.findById(timetableId).orElseThrow(CannotFindByIDException::new);
     }
 
 
@@ -93,9 +107,5 @@ public class TimetableService {
             return true;
         }
         return false;
-    }
-
-    public List<Timetable> findAllWithCourseByStudentId(Long studentId) {
-        return timetableRepository.findAllWithCourseByStudentId(studentId);
     }
 }
