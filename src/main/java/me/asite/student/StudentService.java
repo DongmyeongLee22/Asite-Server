@@ -3,19 +3,12 @@ package me.asite.student;
 import lombok.RequiredArgsConstructor;
 import me.asite.student.dto.StudentJoinRequestDto;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,12 +34,7 @@ public class StudentService implements UserDetailsService {
         Student student = studentRepository.findByStudentNumber(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        return new User(student.getStudentNumber(), student.getPassword(), authorities(student.getRoles()));
+        return new StudentAdapter(student);
     }
 
-    private Collection<? extends GrantedAuthority> authorities(Set<StudentRole> roles) {
-        return roles.stream()
-                .map(r -> new SimpleGrantedAuthority("ROLS_" + r.name()))
-                .collect(Collectors.toSet());
-    }
 }

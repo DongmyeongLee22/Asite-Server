@@ -27,6 +27,8 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -153,6 +155,7 @@ public class TimetableControllerTest extends BaseControllerTest {
         //when && then
         this.mockMvc.perform(put("/api/timetable/{id}", addedtimetable.getId())
                 .header(AUTHORIZATION, getAccessToken(studentNumber, password))
+                .param("studentId", student.getId().toString())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(objectMapper.writeValueAsString(attendanceDto))
         )
@@ -172,6 +175,9 @@ public class TimetableControllerTest extends BaseControllerTest {
                                 fieldWithPath("attendanceDate").description("출석 일자"),
                                 fieldWithPath("startTime").description("출석 시작 시간"),
                                 fieldWithPath("endTime").description("출석 종료 시간")
+                        ),
+                        requestParameters(
+                                parameterWithName("studentId").description("학생 아이디")
                         ),
                         responseHeaders(
                                 headerWithName(CONTENT_TYPE).description("HAL JSON 타입")
@@ -240,8 +246,9 @@ public class TimetableControllerTest extends BaseControllerTest {
         timetableService.addTimetable(student.getId(), course3.getId());
 
         //when && then
-        this.mockMvc.perform(get("/api/timetable/queryByStudentId/{id}", student.getId().toString())
-                .header(AUTHORIZATION, getAccessToken(studentNumber, password)))
+        this.mockMvc.perform(get("/api/timetable/queryTimetable")
+                .header(AUTHORIZATION, getAccessToken(studentNumber, password))
+                .param("studentId", student.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("query-timetable",
@@ -252,6 +259,9 @@ public class TimetableControllerTest extends BaseControllerTest {
                         requestHeaders(
                                 headerWithName(AUTHORIZATION).description("Bearer Token")
 
+                        ),
+                        requestParameters(
+                                parameterWithName("studentId").description("학생의 아이디")
                         ),
                         responseHeaders(
                                 headerWithName(CONTENT_TYPE).description("HAL JSON 타입")

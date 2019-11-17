@@ -38,6 +38,7 @@ public class TimetableService {
         Timetable timetable = timetableRepository.findByIdWithStudentAndCourse(timetableId).orElseThrow(CannotFindByIDException::new);
 
         String courseTime = timetable.getCourse().getTime();
+
         AttendanceState attendanceState = verifyAttendanceState(courseTime);
         AttendanceEndState attendanceEndState = verifyAttendanceEndState(courseTime);
 

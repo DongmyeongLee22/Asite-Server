@@ -133,14 +133,14 @@ operation::query-courses[snippets='request-headers,request-fields,http-request,r
 
 operation::add-timetable[snippets='request-headers,request-fields,http-request,response-headers,response-fields,http-response,links']
 
-=== 시간표 추가
+=== 출석 체크
 
 `PUT` 요청을 사용해서 시간표를 이용하여 출석체크를 할 수 있다.
 
-operation::attendance-check[snippets='request-headers,request-fields,http-request,response-headers,response-fields,http-response,links']
+operation::attendance-check[snippets='request-headers,request-fields,request-parameters,http-request,response-headers,response-fields,http-response,links']
 
 === 시간표 조회
 
 `GET` 요청을 사용해서 시간표를 이용하여 출석체크를 할 수 있다.
 
-operation::query-timetable[snippets='request-headers,request-fields,http-request,response-headers,response-fields,http-response,links']
+operation::query-timetable[snippets='request-headers,request-fields,request-parameters,http-request,response-headers,response-fields,http-response,links']
