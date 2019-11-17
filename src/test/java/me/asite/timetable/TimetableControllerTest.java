@@ -246,7 +246,7 @@ public class TimetableControllerTest extends BaseControllerTest {
         timetableService.addTimetable(student.getId(), course3.getId());
 
         //when && then
-        this.mockMvc.perform(get("/api/timetable/queryTimetable")
+        this.mockMvc.perform(get("/api/timetable")
                 .header(AUTHORIZATION, getAccessToken(studentNumber, password))
                 .param("studentId", student.getId().toString()))
                 .andDo(print())
@@ -303,11 +303,19 @@ public class TimetableControllerTest extends BaseControllerTest {
         Timetable addedTimetable = timetableService.addTimetable(student.getId(), course1.getId());
 
         //when && then
-        this.mockMvc.perform(delete("/{id}", addedTimetable.getId())
-                .header(AUTHORIZATION, getAccessToken(studentNumber, password)))
+        this.mockMvc.perform(delete("/api/timetable/{id}", addedTimetable.getId())
+                .header(AUTHORIZATION, getAccessToken(studentNumber, password))
+                .param("studentId", student.getId().toString()))
                 .andDo(print())
-                .andExpect(status().isOk());
-
+                .andExpect(status().isNoContent())
+                .andDo(document("delete-timetable",
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("Bearer Token")
+                        ),
+                        requestParameters(
+                                parameterWithName("studentId").description("학생 아이디")
+                        )
+                ));
     }
 
     private AttendanceCheckRequestDto createAddtendanceDto() {

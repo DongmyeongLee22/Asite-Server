@@ -41,7 +41,7 @@ public class TimetableController {
         return ResponseEntity.ok(timetableResource);
     }
 
-    @GetMapping("/queryTimetable")
+    @GetMapping
     public ResponseEntity query_TimetableByStudentId(@RequestParam Long studentId,
                                                      @CurrentStudent Student student) {
         try {
@@ -93,7 +93,8 @@ public class TimetableController {
         }
 
         timetableService.deleteTimetable(timetableId);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.noContent().build();
     }
 
 
