@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .mvcMatchers(HttpMethod.POST, "/api/student/join")
-                .mvcMatchers("/actuator/health", "/docs/index.html")
+                .mvcMatchers("/actuator/health", "/docs/index.html", "/api")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }

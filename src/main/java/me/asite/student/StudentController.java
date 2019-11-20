@@ -1,6 +1,7 @@
 package me.asite.student;
 
 import lombok.RequiredArgsConstructor;
+import me.asite.common.ErrorsResource;
 import me.asite.student.dto.StudentJoinRequestDto;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
@@ -26,7 +27,7 @@ public class StudentController {
     public ResponseEntity joinStudent(@RequestBody @Valid StudentJoinRequestDto joinRequestDto,
                                       Errors errors) {
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new ErrorsResource(errors));
         }
 
         Student student = studentService.join(joinRequestDto);

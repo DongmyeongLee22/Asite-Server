@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.asite.student.StudentRole;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ public class StudentJoinRequestDto {
     @NotEmpty
     private String major;
     @NotEmpty
+    @Email
     private String email;
     @NotEmpty
     private Set<StudentRole> roles;

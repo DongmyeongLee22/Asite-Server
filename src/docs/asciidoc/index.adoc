@@ -1,4 +1,4 @@
-= Natural REST API Guide
+= REST API 가이드
 이동명;
 :doctype: book
 :icons: font
@@ -56,6 +56,12 @@
 | `400 Bad Request`
 | 잘못된 요청을 보낸 경우. 응답 본문에 더 오류에 대한 정보가 담겨있다.
 
+| `401 Unauthorized`
+| 허가(인증)되지 않은 사용자가 요청을 보낼 경우.
+
+| `403 Forbidden`
+| 허가(인증)는 되었으나 그 요청에 대한 권한이 없을 경우.
+
 | `404 Not Found`
 | 요청한 리소스가 없음.
 |===
@@ -65,11 +71,11 @@
 
 에러 응답이 발생했을 때 (상태 코드 >= 400), 본문에 해당 문제를 기술한 JSON 객체가 담겨있다. 에러 객체는 다음의 구조를 따른다.
 
-include::{snippets}/errors/response-fields.adoc[]
+include::{snippets}/join-student-errors/response-fields.adoc[]
 
-예를 들어, 잘못된 요청으로 이벤트를 만들려고 했을 때 다음과 같은 `400 Bad Request` 응답을 받는다.
+예를 들어, 잘못된 요청으로 회원가입을 하려고 했을 때 다음과 같은 `400 Bad Request` 응답을 받는다.
 
-include::{snippets}/errors/http-response.adoc[]
+operation::join-student-errors[snippets='http-request,http-response,links']
 
 [[overview-hypermedia]]
 == 하이퍼미디어
@@ -92,7 +98,7 @@ include::{snippets}/errors/http-response.adoc[]
 
 `GET` 요청을 사용하여 인덱스에 접근할 수 있다.
 
-operation::index[snippets='response-body,http-response,links']
+operation::index[snippets='http-request,http-response,links']
 
 [[resources-student]]
 == 학생
