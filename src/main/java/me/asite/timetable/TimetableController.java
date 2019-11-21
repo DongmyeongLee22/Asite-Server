@@ -2,7 +2,7 @@ package me.asite.timetable;
 
 import lombok.RequiredArgsConstructor;
 import me.asite.attendance.AttendanceCheckRequestDto;
-import me.asite.exception.CannotFindByIDException;
+import me.asite.common.ErrorsResource;
 import me.asite.student.CurrentStudent;
 import me.asite.student.Student;
 import org.springframework.hateoas.Link;
@@ -24,14 +24,17 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class TimetableController {
 
     private final TimetableService timetableService;
+    private final StudentValidator studentValidator;
 
     @PostMapping("/add")
     public ResponseEntity addTimetable(@RequestBody @Valid TimetableAddRequestDto dto,
                                        @CurrentStudent Student student,
                                        Errors errors) {
 
-        if (errors.hasErrors() || !student.getId().equals(dto.getStudentId())) {
-            return ResponseEntity.badRequest().build();
+        studentValidator.validateStudentId(dto.getStudentId(), student.getId(), errors);
+
+        if (errors.hasErrors()) {
+            return badRequest(errors);
         }
 
         Timetable timetable = timetableService.addTimetable(dto.getStudentId(), dto.getCourseId());
@@ -41,26 +44,30 @@ public class TimetableController {
         return ResponseEntity.ok(timetableResource);
     }
 
+    private ResponseEntity<ErrorsResource> badRequest(Errors errors) {
+        return ResponseEntity.badRequest().body(new ErrorsResource(errors));
+    }
+
     @GetMapping
     public ResponseEntity query_TimetableByStudentId(@RequestParam Long studentId,
-                                                     @CurrentStudent Student student) {
-        try {
+                                                     @CurrentStudent Student student,
+                                                     Errors errors) {
 
-            if (!student.getId().equals(studentId)) {
-                return ResponseEntity.badRequest().build();
-            }
 
-            List<Timetable> findTimetables = timetableService.findAllWithCourseByStudentId(studentId);
+        studentValidator.validateStudentId(studentId, student.getId(), errors);
 
-            Resources<TimetableResource> timetableResources = getTimetableResources(findTimetables);
-
-            timetableResources.add(linkTo(TimetableController.class).slash("queryByStudentId").slash(studentId).withSelfRel());
-            timetableResources.add(new Link("/docs/index.html#resources-query-timetable").withRel("profile"));
-            return ResponseEntity.ok(timetableResources);
-
-        } catch (CannotFindByIDException e) {
-            return ResponseEntity.badRequest().build();
+        if (errors.hasErrors()) {
+            return badRequest(errors);
         }
+
+        List<Timetable> findTimetables = timetableService.findAllWithCourseByStudentId(studentId);
+
+        Resources<TimetableResource> timetableResources = getTimetableResources(findTimetables);
+
+        timetableResources.add(linkTo(TimetableController.class).slash("queryByStudentId").slash(studentId).withSelfRel());
+        timetableResources.add(new Link("/docs/index.html#resources-query-timetable").withRel("profile"));
+        return ResponseEntity.ok(timetableResources);
+
     }
 
     @PutMapping("/{id}")
@@ -70,8 +77,10 @@ public class TimetableController {
                                           @RequestBody @Valid AttendanceCheckRequestDto dto,
                                           Errors errors) {
 
-        if (errors.hasErrors() || !student.getId().equals(studentId)) {
-            return ResponseEntity.badRequest().build();
+        studentValidator.validateStudentId(studentId, student.getId(), errors);
+
+        if (errors.hasErrors()) {
+            return badRequest(errors);
         }
 
         Timetable checkedTimetable = timetableService.attendanceCheck(timetableId, dto);
@@ -86,10 +95,13 @@ public class TimetableController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteTimetable(@PathVariable("id") Long timetableId,
                                           @RequestParam Long studentId,
-                                          @CurrentStudent Student student) {
+                                          @CurrentStudent Student student,
+                                          Errors errors) {
 
-        if (!student.getId().equals(studentId)) {
-            return ResponseEntity.badRequest().build();
+        studentValidator.validateStudentId(studentId, student.getId(), errors);
+
+        if (errors.hasErrors()) {
+            return badRequest(errors);
         }
 
         timetableService.deleteTimetable(timetableId);
