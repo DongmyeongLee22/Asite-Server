@@ -11,6 +11,9 @@ import me.asite.student.StudentRepository;
 import me.asite.student.StudentRole;
 import me.asite.student.StudentService;
 import me.asite.student.dto.StudentJoinRequestDto;
+import me.asite.timetable.dto.TimetableAddRequestDto;
+import me.asite.timetable.dto.TimetableDeleteRequestDto;
+import me.asite.timetable.dto.TimetableQueryRequestDto;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +30,10 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TimetableControllerTest extends BaseControllerTest {
@@ -150,12 +152,11 @@ public class TimetableControllerTest extends BaseControllerTest {
         Student student = getStudentAndJoin(studentNumber, password);
         Course course = createCourseAndAdd("4학년", "컴퓨터공학과", "알고리즘");
         Timetable addedtimetable = timetableService.addTimetable(student.getId(), course.getId());
-        AttendanceCheckRequestDto attendanceDto = createAddtendanceDto();
+        AttendanceCheckRequestDto attendanceDto = createAddtendanceDto(student.getId());
 
         //when && then
         this.mockMvc.perform(put("/api/timetable/{id}", addedtimetable.getId())
                 .header(AUTHORIZATION, getAccessToken(studentNumber, password))
-                .param("studentId", student.getId().toString())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(objectMapper.writeValueAsString(attendanceDto))
         )
@@ -174,10 +175,8 @@ public class TimetableControllerTest extends BaseControllerTest {
                         requestFields(
                                 fieldWithPath("attendanceDate").description("출석 일자"),
                                 fieldWithPath("startTime").description("출석 시작 시간"),
-                                fieldWithPath("endTime").description("출석 종료 시간")
-                        ),
-                        requestParameters(
-                                parameterWithName("studentId").description("학생 아이디")
+                                fieldWithPath("endTime").description("출석 종료 시간"),
+                                fieldWithPath("studentId").description("학생 아이디")
                         ),
                         responseHeaders(
                                 headerWithName(CONTENT_TYPE).description("HAL JSON 타입")
@@ -238,6 +237,9 @@ public class TimetableControllerTest extends BaseControllerTest {
         String studentNumber = "201412345";
         String password = "password";
         Student student = getStudentAndJoin(studentNumber, password);
+
+        TimetableQueryRequestDto dto = new TimetableQueryRequestDto(student.getId());
+
         Course course1 = createCourseAndAdd("4학년", "컴퓨터공학과", "알고리즘");
         Course course2 = createCourseAndAdd("4학년", "컴퓨터공학과", "자료구조");
         Course course3 = createCourseAndAdd("4학년", "컴퓨터공학과", "디자인패턴");
@@ -248,7 +250,8 @@ public class TimetableControllerTest extends BaseControllerTest {
         //when && then
         this.mockMvc.perform(get("/api/timetable")
                 .header(AUTHORIZATION, getAccessToken(studentNumber, password))
-                .param("studentId", student.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("query-timetable",
@@ -260,8 +263,8 @@ public class TimetableControllerTest extends BaseControllerTest {
                                 headerWithName(AUTHORIZATION).description("Bearer Token")
 
                         ),
-                        requestParameters(
-                                parameterWithName("studentId").description("학생의 아이디")
+                        requestFields(
+                                fieldWithPath("studentId").description("학생의 아이디")
                         ),
                         responseHeaders(
                                 headerWithName(CONTENT_TYPE).description("HAL JSON 타입")
@@ -294,32 +297,96 @@ public class TimetableControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @TestDescription("다른 학생의 시간표를 조회하려고 할 때")
+    public void query_TimetableByStudentId_BadRequest() throws Exception {
+        //given
+        String student1Number = "201412345";
+        String student2Number = "201712345";
+        String password = "password";
+        Student student1 = getStudentAndJoin(student1Number, password);
+        Student student2 = getStudentAndJoin(student2Number, password);
+
+        TimetableQueryRequestDto dto = new TimetableQueryRequestDto(student1.getId());
+
+        Course course1 = createCourseAndAdd("4학년", "컴퓨터공학과", "알고리즘");
+        Course course2 = createCourseAndAdd("4학년", "컴퓨터공학과", "자료구조");
+        Course course3 = createCourseAndAdd("4학년", "컴퓨터공학과", "디자인패턴");
+        timetableService.addTimetable(student1.getId(), course1.getId());
+        timetableService.addTimetable(student1.getId(), course2.getId());
+        timetableService.addTimetable(student1.getId(), course3.getId());
+
+        //when && then
+        this.mockMvc.perform(get("/api/timetable")
+                .header(AUTHORIZATION, getAccessToken(student2Number, password))
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("content[0].field").exists())
+                .andExpect(jsonPath("content[0].objectName").exists())
+                .andExpect(jsonPath("content[0].code").exists())
+                .andExpect(jsonPath("_links.index.href").exists())
+        ;
+    }
+
+    @Test
     public void delete_Timetable() throws Exception {
         //given
         String studentNumber = "201412345";
         String password = "password";
         Student student = getStudentAndJoin(studentNumber, password);
+        TimetableDeleteRequestDto dto = new TimetableDeleteRequestDto(student.getId());
         Course course1 = createCourseAndAdd("4학년", "컴퓨터공학과", "알고리즘");
         Timetable addedTimetable = timetableService.addTimetable(student.getId(), course1.getId());
 
         //when && then
         this.mockMvc.perform(delete("/api/timetable/{id}", addedTimetable.getId())
                 .header(AUTHORIZATION, getAccessToken(studentNumber, password))
-                .param("studentId", student.getId().toString()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andExpect(status().isNoContent())
                 .andDo(document("delete-timetable",
                         requestHeaders(
                                 headerWithName(AUTHORIZATION).description("Bearer Token")
                         ),
-                        requestParameters(
-                                parameterWithName("studentId").description("학생 아이디")
+                        requestFields(
+                                fieldWithPath("studentId").description("학생 아이디")
                         )
                 ));
     }
 
-    private AttendanceCheckRequestDto createAddtendanceDto() {
+    @Test
+    @TestDescription("다른 회원의 시간표를 삭제하려고 할 때")
+    public void delete_Timetable_BadRequest() throws Exception {
+        //given
+        String student1Number = "201412345";
+        String student2Number = "201712345";
+        String password = "password";
+        Student student1 = getStudentAndJoin(student1Number, password);
+        Student student2 = getStudentAndJoin(student2Number, password);
+        TimetableDeleteRequestDto dto = new TimetableDeleteRequestDto(student1.getId());
+
+        Course course1 = createCourseAndAdd("4학년", "컴퓨터공학과", "알고리즘");
+        Timetable addedTimetable = timetableService.addTimetable(student1.getId(), course1.getId());
+
+        //when && then
+        this.mockMvc.perform(delete("/api/timetable/{id}", addedTimetable.getId())
+                .header(AUTHORIZATION, getAccessToken(student2Number, password))
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("content[0].field").exists())
+                .andExpect(jsonPath("content[0].objectName").exists())
+                .andExpect(jsonPath("_links.index.href").exists())
+        ;
+    }
+
+
+    private AttendanceCheckRequestDto createAddtendanceDto(Long studentId) {
         return AttendanceCheckRequestDto.builder()
+                .studentId(studentId)
                 .attendanceDate("11-16")
                 .startTime("10:00")
                 .endTime("11:00")

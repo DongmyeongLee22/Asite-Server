@@ -5,6 +5,9 @@ import me.asite.attendance.AttendanceCheckRequestDto;
 import me.asite.common.ErrorsResource;
 import me.asite.student.CurrentStudent;
 import me.asite.student.Student;
+import me.asite.timetable.dto.TimetableAddRequestDto;
+import me.asite.timetable.dto.TimetableDeleteRequestDto;
+import me.asite.timetable.dto.TimetableQueryRequestDto;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resources;
@@ -31,11 +34,8 @@ public class TimetableController {
                                        @CurrentStudent Student student,
                                        Errors errors) {
 
-        studentValidator.validateStudentId(dto.getStudentId(), student.getId(), errors);
+        if (validate(student, errors, dto.getStudentId())) return badRequest(errors);
 
-        if (errors.hasErrors()) {
-            return badRequest(errors);
-        }
 
         Timetable timetable = timetableService.addTimetable(dto.getStudentId(), dto.getCourseId());
         TimetableResource timetableResource = new TimetableResource(timetable);
@@ -44,27 +44,18 @@ public class TimetableController {
         return ResponseEntity.ok(timetableResource);
     }
 
-    private ResponseEntity<ErrorsResource> badRequest(Errors errors) {
-        return ResponseEntity.badRequest().body(new ErrorsResource(errors));
-    }
-
     @GetMapping
-    public ResponseEntity query_TimetableByStudentId(@RequestParam Long studentId,
+    public ResponseEntity query_TimetableByStudentId(@RequestBody @Valid TimetableQueryRequestDto dto,
                                                      @CurrentStudent Student student,
                                                      Errors errors) {
 
+        if (validate(student, errors, dto.getStudentId())) return badRequest(errors);
 
-        studentValidator.validateStudentId(studentId, student.getId(), errors);
-
-        if (errors.hasErrors()) {
-            return badRequest(errors);
-        }
-
-        List<Timetable> findTimetables = timetableService.findAllWithCourseByStudentId(studentId);
+        List<Timetable> findTimetables = timetableService.findAllWithCourseByStudentId(dto.getStudentId());
 
         Resources<TimetableResource> timetableResources = getTimetableResources(findTimetables);
 
-        timetableResources.add(linkTo(TimetableController.class).slash("queryByStudentId").slash(studentId).withSelfRel());
+        timetableResources.add(linkTo(TimetableController.class).slash("queryByStudentId").slash(dto.getStudentId()).withSelfRel());
         timetableResources.add(new Link("/docs/index.html#resources-query-timetable").withRel("profile"));
         return ResponseEntity.ok(timetableResources);
 
@@ -72,16 +63,11 @@ public class TimetableController {
 
     @PutMapping("/{id}")
     public ResponseEntity attendanceCheck(@PathVariable("id") Long timetableId,
-                                          @RequestParam Long studentId,
                                           @CurrentStudent Student student,
                                           @RequestBody @Valid AttendanceCheckRequestDto dto,
                                           Errors errors) {
 
-        studentValidator.validateStudentId(studentId, student.getId(), errors);
-
-        if (errors.hasErrors()) {
-            return badRequest(errors);
-        }
+        if (validate(student, errors, dto.getStudentId())) return badRequest(errors);
 
         Timetable checkedTimetable = timetableService.attendanceCheck(timetableId, dto);
 
@@ -94,26 +80,45 @@ public class TimetableController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteTimetable(@PathVariable("id") Long timetableId,
-                                          @RequestParam Long studentId,
+                                          @RequestBody @Valid TimetableDeleteRequestDto dto,
                                           @CurrentStudent Student student,
                                           Errors errors) {
 
-        studentValidator.validateStudentId(studentId, student.getId(), errors);
-
-        if (errors.hasErrors()) {
-            return badRequest(errors);
-        }
+        if (validate(student, errors, dto.getStudentId())) return badRequest(errors);
 
         timetableService.deleteTimetable(timetableId);
 
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * 처음은 @Valid로 생긴 에러를 확인하고 두번째는 validater를 통해 검증한 에러를 확인한다.
+     */
+    private boolean validate(@CurrentStudent Student student, Errors errors, Long studentId) {
+        if (errors.hasErrors()) {
+            return true;
+        }
 
+        studentValidator.validateStudentId(studentId, student.getId(), errors);
+
+        return errors.hasErrors();
+    }
+
+
+    /**
+     * TimetableList들을 TimetableResource로 매핑한다.
+     */
     private Resources<TimetableResource> getTimetableResources(List<Timetable> findTimetables) {
         List<TimetableResource> collect = findTimetables.stream()
                 .map(TimetableResource::new)
                 .collect(toList());
         return new Resources<>(collect);
+    }
+
+    /**
+     * body에 ErrorsResouce를 넣고 BadRequest로 반환한다.
+     */
+    private ResponseEntity<ErrorsResource> badRequest(Errors errors) {
+        return ResponseEntity.badRequest().body(new ErrorsResource(errors));
     }
 }

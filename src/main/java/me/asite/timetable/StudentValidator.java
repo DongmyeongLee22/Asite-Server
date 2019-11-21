@@ -11,7 +11,7 @@ public class StudentValidator {
      */
     public void validateStudentId(Long parameterStudentId, Long loginedStudentId, Errors errors) {
         if (!parameterStudentId.equals(loginedStudentId)) {
-            errors.rejectValue("studenrId", "wrongValue", "회원아이디가 맞지 않습니다.");
+            errors.rejectValue("studentId", "wrongValue", "회원아이디가 맞지 않습니다.");
         }
     }
 }

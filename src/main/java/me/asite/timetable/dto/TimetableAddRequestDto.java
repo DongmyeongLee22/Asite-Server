@@ -1,4 +1,4 @@
-package me.asite.timetable;
+package me.asite.timetable.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

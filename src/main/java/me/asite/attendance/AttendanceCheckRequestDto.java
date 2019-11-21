@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -12,6 +13,8 @@ import javax.validation.constraints.NotEmpty;
 public class AttendanceCheckRequestDto {
 
 
+    @NotNull
+    private Long studentId;
     @NotEmpty
     private String attendanceDate;
     @NotEmpty

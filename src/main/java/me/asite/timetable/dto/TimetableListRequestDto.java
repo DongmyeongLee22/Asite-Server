@@ -1,6 +1,7 @@
-package me.asite.timetable;
+package me.asite.timetable.dto;
 
 import lombok.Data;
+import me.asite.timetable.Timetable;
 
 @Data
 public class TimetableListRequestDto {
