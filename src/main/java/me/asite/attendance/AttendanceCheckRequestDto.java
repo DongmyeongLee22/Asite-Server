@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @Builder
@@ -15,11 +16,15 @@ public class AttendanceCheckRequestDto {
 
     @NotNull
     private Long studentId;
-    @NotEmpty
-    private String attendanceDate;
-    @NotEmpty
-    private String startTime;
-    @NotEmpty
-    private String endTime;
+    @NotNull
+    private LocalDate attendanceDate;
+    @NotNull
+    private LocalTime startTime;
+    @NotNull
+    private LocalTime endTime;
+    @NotNull
+    private AttendanceState attendanceState;
+    @NotNull
+    private AttendanceEndState attendanceEndState;
 
 }

@@ -1,9 +1,6 @@
 package me.asite.timetable;
 
-import me.asite.attendance.Attendance;
-import me.asite.attendance.AttendanceCheckRequestDto;
-import me.asite.attendance.AttendanceEndState;
-import me.asite.attendance.AttendanceRepository;
+import me.asite.attendance.*;
 import me.asite.common.TestDescription;
 import me.asite.course.Course;
 import me.asite.course.repository.CourseRepository;
@@ -20,6 +17,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -84,12 +83,14 @@ public class TimetableServiceTest {
         Student student = getStudentAndJoin("201412345", "password");
         Course course = createCourseAndAdd("4학년", "컴퓨터공학과", "알고리즘");
         Timetable addedTimetable = timetableService.addTimetable(student.getId(), course.getId());
-        String startTime = "10:00";
-        String endTime = "11:00";
+        LocalTime startTime = LocalTime.of(10, 0);
+        LocalTime endTime = LocalTime.of(11, 0);
         AttendanceCheckRequestDto attendancedto = AttendanceCheckRequestDto.builder()
-                .attendanceDate("11-16")
+                .attendanceDate(LocalDate.now())
                 .startTime(startTime)
                 .endTime(endTime)
+                .attendanceState(AttendanceState.ATTENDANCE)
+                .attendanceEndState(AttendanceEndState.EARLY)
                 .build();
 
         //when
@@ -131,12 +132,14 @@ public class TimetableServiceTest {
         Student student = getStudentAndJoin("201412345", "password");
         Course course = createCourseAndAdd("4학년", "컴퓨터공학과", "알고리즘");
         Timetable addedTimetable = timetableService.addTimetable(student.getId(), course.getId());
-        String startTime = "10:00";
-        String endTime = "11:00";
+        LocalTime startTime = LocalTime.of(10, 0);
+        LocalTime endTime = LocalTime.of(11, 0);
         AttendanceCheckRequestDto attendancedto = AttendanceCheckRequestDto.builder()
-                .attendanceDate("11-16")
+                .attendanceDate(LocalDate.now())
                 .startTime(startTime)
                 .endTime(endTime)
+                .attendanceState(AttendanceState.ATTENDANCE)
+                .attendanceEndState(AttendanceEndState.EARLY)
                 .build();
 
         //when
@@ -169,8 +172,6 @@ public class TimetableServiceTest {
 
         assertThat(timetables.size()).isEqualTo(3);
     }
-
-
 
     private Course createCourseAndAdd(String grade, String major, String title) {
         Course course = Course.builder()

@@ -24,8 +24,6 @@ public class StudentService implements UserDetailsService {
         Student student = modelMapper.map(joinRequestDto, Student.class);
         student.encodingPassword(this.passwordEncoder.encode(student.getPassword()));
 
-        //TODO 회원가입이 중복회원 검증
-
         return this.studentRepository.save(student);
     }
 

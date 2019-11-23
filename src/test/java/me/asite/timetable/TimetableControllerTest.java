@@ -1,6 +1,8 @@
 package me.asite.timetable;
 
 import me.asite.attendance.AttendanceCheckRequestDto;
+import me.asite.attendance.AttendanceEndState;
+import me.asite.attendance.AttendanceState;
 import me.asite.common.AppProperties;
 import me.asite.common.BaseControllerTest;
 import me.asite.common.TestDescription;
@@ -21,6 +23,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -176,6 +180,8 @@ public class TimetableControllerTest extends BaseControllerTest {
                                 fieldWithPath("attendanceDate").description("출석 일자"),
                                 fieldWithPath("startTime").description("출석 시작 시간"),
                                 fieldWithPath("endTime").description("출석 종료 시간"),
+                                fieldWithPath("attendanceState").description("출석 상태"),
+                                fieldWithPath("attendanceEndState").description("출석 종료 상태"),
                                 fieldWithPath("studentId").description("학생 아이디")
                         ),
                         responseHeaders(
@@ -387,9 +393,11 @@ public class TimetableControllerTest extends BaseControllerTest {
     private AttendanceCheckRequestDto createAddtendanceDto(Long studentId) {
         return AttendanceCheckRequestDto.builder()
                 .studentId(studentId)
-                .attendanceDate("11-16")
-                .startTime("10:00")
-                .endTime("11:00")
+                .attendanceDate(LocalDate.now())
+                .startTime(LocalTime.of(10, 0))
+                .endTime(LocalTime.of(11, 0))
+                .attendanceState(AttendanceState.ATTENDANCE)
+                .attendanceEndState(AttendanceEndState.EARLY)
                 .build();
     }
 

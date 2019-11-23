@@ -14,6 +14,7 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -23,7 +24,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Timetable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "timetable_id")
     private Long id;
 
@@ -48,27 +49,27 @@ public class Timetable {
 
     private int earlyEnd;
 
+    //--- 생성 메서드 ---//
+    public static Timetable createTimetable(Student student, Course course) {
+        Timetable timetable = new Timetable();
+        timetable.setStudent(student);
+        timetable.setCourse(course);
+        timetable.attendanceCount = 0;
+        timetable.latelessCount = 0;
+        timetable.absentCount = 0;
+        timetable.earlyEnd = 0;
+
+        return timetable;
+    }
+
     //--- 연관관계 편의 메서드 ---//
-    public void setStudent(Student student){
+    public void setStudent(Student student) {
         this.student = student;
         student.getTimetableList().add(this);
     }
 
-    public void setCourse(Course course){
+    public void setCourse(Course course) {
         this.course = course;
-    }
-
-    //--- 생성 메서드 ---//
-    public static Timetable createTimetable(Student student, Course course){
-            Timetable timetable = new Timetable();
-            timetable.setStudent(student);
-            timetable.setCourse(course);
-            timetable.attendanceCount = 0;
-            timetable.latelessCount = 0;
-            timetable.absentCount = 0;
-        timetable.earlyEnd = 0;
-
-            return timetable;
     }
 
     public void addAttendance(Attendance attendance) {

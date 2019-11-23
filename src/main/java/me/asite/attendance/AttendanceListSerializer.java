@@ -15,9 +15,9 @@ public class AttendanceListSerializer extends JsonSerializer<List<Attendance>> {
 
         for (Attendance attendance : attendanceList) {
             gen.writeStartObject();
-            gen.writeStringField("attendanceDate", attendance.getAttendanceDate());
-            gen.writeStringField("startTime", attendance.getStartTime());
-            gen.writeStringField("endTime", attendance.getEndTime());
+            gen.writeStringField("attendanceDate", attendance.getAttendanceDate().toString());
+            gen.writeStringField("startTime", attendance.getStartTime().toString());
+            gen.writeStringField("endTime", attendance.getEndTime().toString());
             gen.writeStringField("attendanceState", attendance.getAttendanceState().name());
             gen.writeStringField("attendanceEndState", attendance.getAttendanceEndState().name());
             gen.writeEndObject();

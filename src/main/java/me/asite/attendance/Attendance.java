@@ -4,6 +4,8 @@ import lombok.*;
 import me.asite.timetable.Timetable;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -22,14 +24,16 @@ public class Attendance {
     @JoinColumn(name = "timetable_id")
     private Timetable timetable;
 
-    private String attendanceDate;
+    private LocalDate attendanceDate;
 
-    private String startTime;
+    private LocalTime startTime;
 
-    private String endTime;
+    private LocalTime endTime;
 
+    @Enumerated(EnumType.STRING)
     private AttendanceState attendanceState;
 
+    @Enumerated(EnumType.STRING)
     private AttendanceEndState attendanceEndState;
 
     public void setTimetable(Timetable timetable) {

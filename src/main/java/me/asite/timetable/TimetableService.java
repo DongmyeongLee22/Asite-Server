@@ -37,10 +37,8 @@ public class TimetableService {
 
         Timetable timetable = timetableRepository.findByIdWithStudentAndCourse(timetableId).orElseThrow(CannotFindByIDException::new);
 
-        String courseTime = timetable.getCourse().getTime();
-
-        AttendanceState attendanceState = verifyAttendanceState(courseTime);
-        AttendanceEndState attendanceEndState = verifyAttendanceEndState(courseTime);
+        AttendanceState attendanceState = dto.getAttendanceState();
+        AttendanceEndState attendanceEndState = dto.getAttendanceEndState();
 
         if (attendanceCheck(timetable, attendanceState, attendanceEndState)) {
             Attendance attendance = makeAttendance(dto, attendanceState, attendanceEndState);
@@ -78,16 +76,6 @@ public class TimetableService {
                 .endTime(dto.getEndTime())
                 .attendanceState(attendanceState)
                 .attendanceEndState(attendanceEndState).build();
-    }
-
-    private AttendanceEndState verifyAttendanceEndState(String courseTime) {
-        //TODO 출석시간에 맞에 출석상태를 검증해야함
-        return AttendanceEndState.EARLY;
-    }
-
-    private AttendanceState verifyAttendanceState(String courseTime) {
-        //TODO 출석시간에 맞에 출석상태를 검증해야함
-        return AttendanceState.ATTENDANCE;
     }
 
 
