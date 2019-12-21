@@ -31,7 +31,6 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        String test = appProperties.getClientSecret();
         clients.inMemory()
                 .withClient(appProperties.getClientId())
                 .authorizedGrantTypes("password", "refresh_token")
