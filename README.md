@@ -1,24 +1,20 @@
 # Asite-Server
-> REST에 대한 이해를 위해 REST의 구현원칙을 제대로 지키며 REST Docs로 테스트 코드작성을 통해 API 문서를 제작하여 클라이언트가 제작된 문서만으로 독립적으로 확장가능한 개발이 가능하도록 한다.
+> REST에 대한 이해를 위해 REST의 구현원칙을 지키며 최대한 RESTful하게 서버를 구축한다.
+
 ### [제작한 REST Docs 문서 바로가기](https://dongmyeonglee22.github.io/Asite-Server/)
+
+## 동작 흐름
+![img](./images/flow.png)
 
 ## 사용 기술
 - JAVA
 - Gradle
-  - 빌드 자동화 도구
-  - 각종 의존성들을 관리해준다.
 - Spring Boot
-  - 기존에 필요한 초기 설정들을 Spring Boot가 대신 해준다.
 - Spring Data JPA
-  - JPA의 기존 반복되는 로직들을 추상화를 통해 강력한 지원
 - Spring HATEOAS
-  - HATEOAS 원칙을 따르는 REST API를 제공하기 위해 사용
 - Spring REST Docs
-  - RESTful 문서화를 제작하기 위해 사용
 - Spring Security Oauth
-  - Spring Security와 OAuth를 함께 사용할수 있게 해준다.
 - QueryDsl
-  - JPA의 동적쿼리를 사용함에 있어 좀더 편리하게 해줌
 - ~~AWS S3, EC2, RDS, CodeDeploy~~
 - ~~Travis CI~~
 
@@ -26,7 +22,7 @@
 
 
 ## REST란?
-REST(Representational State Transfer)는 웹과 같은 분산 하이퍼미디어 시스템에서 사용하는 통신 네트워크 아키텍처이며 REST의 구현 원칙을 제대로 지키는 시스템을 RESTful이라고 할수 있다.
+- REST(Representational State Transfer)는 웹과 같은 분산 하이퍼미디어 시스템에서 사용하는 통신 네트워크 아키텍처이며 REST의 구현 원칙을 제대로 지키는 시스템을 RESTful이라고 할수 있다.
 
 ### 구현 원칙
 1. 클라이언트 서버
@@ -51,23 +47,27 @@ REST(Representational State Transfer)는 웹과 같은 분산 하이퍼미디어
 
 ---
 
-#### 엔티티 모델 설계
+## 엔티티 모델 설계
 ![image](https://user-images.githubusercontent.com/57207769/69481091-50dcaa00-0e51-11ea-8b90-23f869f0250c.png)
 
-#### 테이블 설계
+## 테이블 설계
 ![image](https://user-images.githubusercontent.com/57207769/71796247-26efe780-308d-11ea-93f3-ef9313f50dc4.png)
 
 ## 예시
 - 자세한 내용은 [REST Docs 문서](https://dongmyeonglee22.github.io/Asite-Server/)를 참조해주세요
-#### 잘못된 요청
-클라이언트가 잘못된 요청을 보낼 경우 발생하는 HTTP 요청, 응답 메시지와 응답 메시지를 서술해주는 테이블
+
+### 1. 잘못된 요청
+- 클라이언트가 잘못된 요청을 보낼 경우 발생하는 HTTP 요청, 응답 메시지와 응답 메시지를 서술해주는 테이블
+
 <br>
+
 ![image](https://user-images.githubusercontent.com/57207769/71784480-42c89e80-3037-11ea-9f9f-ec8d8b0d7e9f.png)
+
 ![image](https://user-images.githubusercontent.com/57207769/71784505-90450b80-3037-11ea-9de9-356b4a25b03f.png)
 
 ---
 
-#### 토큰 발급
-클라이언트가 username, password, grant_type와 함께 요청을 보낸 후 사용자가 맞다면 토큰을 발급해주는 HTTP 통신에 대한 요청, 응답 메시지와 요청 응답을 서술해주는 테이블
+### 2. 토큰 발급
+- 클라이언트가 username, password, grant_type와 함께 요청을 보낸 후 사용자가 맞다면 토큰을 발급해주는 HTTP 통신에 대한 요청, 응답 메시지와 요청 응답을 서술해주는 테이블
 ![image](https://user-images.githubusercontent.com/57207769/71784547-f5006600-3037-11ea-8462-fa0b24999937.png)
 ![image](https://user-images.githubusercontent.com/57207769/71784554-ffbafb00-3037-11ea-80e6-2ca05ed42568.png)
