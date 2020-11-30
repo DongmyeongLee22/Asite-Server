@@ -1,7 +1,7 @@
 # Asite-Server
 > REST에 대한 이해를 위해 REST의 구현원칙을 지키며 최대한 RESTful하게 서버를 구축한다.
 
-### [제작한 REST Docs 문서 바로가기](https://dongmyeonglee22.github.io/Asite-Server/)
+### [제작한 REST Docs 문서 바로가기](https://pompitzz.github.io/Asite-Server/)
 
 ## 동작 흐름
 ![img](./images/flow.png)
